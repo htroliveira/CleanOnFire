@@ -2,6 +2,11 @@ apply plugin: 'java'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
+    compile 'com.squareup:javapoet:1.9.0'
+    compile project(":cleanonfire-annotations")
+
+
 }
 
 sourceCompatibility = "1.7"

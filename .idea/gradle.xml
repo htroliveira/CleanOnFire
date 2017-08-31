@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/cleanonfire-annotations" />
+            <option value="$PROJECT_DIR$/cleanonfire-api" />
             <option value="$PROJECT_DIR$/cleanonfire-processor" />
           </set>
         </option>

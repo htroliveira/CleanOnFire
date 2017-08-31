@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/annotationcleancodelib_pds.iml" filepath="$PROJECT_DIR$/annotationcleancodelib_pds.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cleanonfire-annotations/cleanonfire-annotations.iml" filepath="$PROJECT_DIR$/cleanonfire-annotations/cleanonfire-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cleanonfire-api/cleanonfire-api.iml" filepath="$PROJECT_DIR$/cleanonfire-api/cleanonfire-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/cleanonfire-processor/cleanonfire-processor.iml" filepath="$PROJECT_DIR$/cleanonfire-processor/cleanonfire-processor.iml" />
     </modules>
   </component>
