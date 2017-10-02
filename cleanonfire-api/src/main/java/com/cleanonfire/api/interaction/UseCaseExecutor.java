@@ -8,56 +8,77 @@ import com.cleanonfire.api.core.UseCase;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
+
 /**
- * Created by heitor-12 on 08/08/17.
+ * Created by heitor-12 on 02/08/17.
  */
-
 public class UseCaseExecutor {
-    ThreadPoolExecutor threadPoolExecutor;
+    ThreadPoolExecutor executor;
 
-    public UseCaseExecutor(ThreadPoolExecutor threadPoolExecutor) {
-        this.threadPoolExecutor = threadPoolExecutor;
+    public UseCaseExecutor(ThreadPoolExecutor executor) {
+        this.executor = executor;
     }
 
-    public <P, R, F> void execute(
-            final UseCase<P, R> useCase,
-            final P param,
-            final OnResultListener<F> resultListener,
-            OnErrorListener errorListener,
-            final Mapper<R, F> mapper) {
+    public <Param, Result> void execute(UseCase<Param, Result> useCase, Param params, OnResultListener<Result> onResultListener, OnErrorListener errorListener) {
 
-        threadPoolExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                useCase.execute(param,
-                        new OnResultListener<R>() {
-                            @Override
-                            public void onResult(R r) {
-                                final F finalResult = mapper.map(r);
-                                postOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        resultListener.onResult(finalResult);
-                                    }
-                                });
-                            }
-                        }, new OnErrorListener() {
-                            @Override
-                            public void onError(final Throwable e) {
-                                postOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        onError(e);
-                                    }
-                                });
-                            }
-                        });
-            }
-        });
-
+        executeUseCase(useCase, params,
+                result -> executeOnUiThread(() -> onResultListener.onResult(result)),
+                error -> executeOnUiThread(() -> errorListener.onError(error))
+        );
     }
 
-    private void postOnUiThread(Runnable runnable) {
+    public <Param, Result, TransformedResult> void executeTransformingResults(UseCase<Param, Result> useCase, Param params, OnResultListener<TransformedResult> onResultListener, OnErrorListener errorListener, Mapper<Result, TransformedResult> mapper) {
+        executeUseCase(useCase, params,
+                result -> {
+                    try {
+                        TransformedResult transformedResult = mapper.map(result);
+                        executeOnUiThread(() -> onResultListener.onResult(transformedResult));
+                    } catch (Throwable e) {
+                        executeOnUiThread(() -> errorListener.onError(e));
+                    }
+                },
+                error -> executeOnUiThread(() -> errorListener.onError(error))
+        );
+    }
+
+    public <UseCaseParam, Param, Result> void executeTransformingParams(UseCase<UseCaseParam, Result> useCase, Param params, OnResultListener<Result> onResultListener, OnErrorListener errorListener, Mapper<Param, UseCaseParam> paramMapper) {
+        executeUseCase(useCase, params,
+                result -> {
+                    try {
+                        executeOnUiThread(() -> onResultListener.onResult(result));
+                    } catch (Throwable e) {
+                        executeOnUiThread(() -> errorListener.onError(e));
+                    }
+                },
+                error -> executeOnUiThread(() -> errorListener.onError(error)),
+                paramMapper
+        );
+    }
+
+    public <UseCaseParam, Param, Result, TransformedResult> void executeTransformingResultsAndParams(UseCase<UseCaseParam, Result> useCase, Param params, OnResultListener<TransformedResult> onResultListener, OnErrorListener errorListener, Mapper<Result, TransformedResult> resultMapper, Mapper<Param, UseCaseParam> paramMapper) {
+        executeUseCase(useCase, params,
+                result -> {
+                    try {
+                        TransformedResult transformedResult = resultMapper.map(result);
+                        executeOnUiThread(() -> onResultListener.onResult(transformedResult));
+                    } catch (Throwable e) {
+                        executeOnUiThread(() -> errorListener.onError(e));
+                    }
+                },
+                error -> executeOnUiThread(() -> errorListener.onError(error)),
+                paramMapper
+        );
+    }
+
+    private <Param, Result> void executeUseCase(UseCase<Param, Result> useCase, Param params, OnResultListener<Result> resultListener, OnErrorListener errorListener) {
+        executor.execute(() -> useCase.execute(params, resultListener, errorListener));
+    }
+
+    private <UseCaseParam, Param, Result> void executeUseCase(UseCase<UseCaseParam, Result> useCase, Param params, OnResultListener<Result> resultListener, OnErrorListener errorListener, Mapper<Param, UseCaseParam> paramMapper) {
+        executor.execute(() -> useCase.execute(paramMapper.map(params), resultListener, errorListener));
+    }
+
+    private void executeOnUiThread(Runnable runnable) {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
 }

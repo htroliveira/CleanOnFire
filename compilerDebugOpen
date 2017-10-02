@@ -1,0 +1,23 @@
+
+
+echo './gradlew --no-daemon -Dorg.gradle.debug=true :app:clean :app:compileDebugJavaWithJavac' > ./temp.sh
+chmod +x temp.sh
+if [[ -e /bin/gnome-terminal ]]; then
+
+	gnome-terminal -e "./temp.sh" &
+
+elif [[ -e /bin/konsole ]]; then
+
+	konsole -e "./temp.sh" &
+
+elif [[ -e /bin/xterm ]]; then
+
+	xterm -e "./temp.sh" &
+
+elif [[ -e /Applications/Utilities/Terminal.app ]]; then
+	DIR=$(pwd)
+	sh -c "osascript -e 'tell application \"Terminal\" to do script \"cd $DIR && ./temp.sh\"'"
+
+fi
+sleep 3
+rm -rf ./temp.sh

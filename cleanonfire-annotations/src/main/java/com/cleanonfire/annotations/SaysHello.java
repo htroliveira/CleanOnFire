@@ -5,6 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.CLASS)
+/**
+ * Created by heitorgianastasio on 02/10/17.
+ */
 @Target(ElementType.TYPE)
-public @interface UseCase {}
+@Retention(RetentionPolicy.CLASS)
+public @interface SaysHello {
+}
