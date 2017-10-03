@@ -15,10 +15,6 @@ public interface ElementValidator {
         private boolean valid;
         private List<String> messages;
 
-        public ValidationResult(boolean valid) {
-            this.valid = valid;
-        }
-
         public ValidationResult(boolean valid, List<String> messages) {
             this.valid = valid;
             this.messages = messages;

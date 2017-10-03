@@ -10,11 +10,10 @@ import com.cleanonfire.annotations.SaysHello;
 /**
  * Created by heitorgianastasio on 02/10/17.
  */
-@SaysHello
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HelloMainActivity.hello(this);
+
     }
 }

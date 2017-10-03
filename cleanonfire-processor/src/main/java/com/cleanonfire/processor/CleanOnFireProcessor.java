@@ -41,7 +41,7 @@ public class CleanOnFireProcessor extends AbstractProcessor {
             try {
                 supportedAnnotation.getProcessor().process(elements);
             }catch (ProcessingException pe){
-                processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR,pe.getCompilerMessage());
+                processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR,pe.getCompilerMessage(),pe.getElement());
             }
         }
         return false;

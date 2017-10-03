@@ -1,7 +1,9 @@
 package com.cleanonfire.processor;
 
 import com.cleanonfire.annotations.SaysHello;
+import com.cleanonfire.annotations.data.orm.Entity;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
+import com.cleanonfire.processor.processing.data.orm.EntityOrmProcessor;
 import com.cleanonfire.processor.processing.hellotest.SaysHelloProcessor;
 
 import java.lang.annotation.Annotation;
@@ -15,7 +17,8 @@ import java.util.Set;
 
 public enum SupportedAnnotation {
 
-    SAYS_HELLO(SaysHello.class,new SaysHelloProcessor(SaysHello.class));
+    SAYS_HELLO(SaysHello.class,new SaysHelloProcessor(SaysHello.class)),
+    ORM_ENTITY(Entity.class, new EntityOrmProcessor(Entity.class));
 
     SupportedAnnotation(Class<? extends Annotation> supportedAnnotation, GenericAnnotationProcessor processor) {
         this.supportedAnnotation = supportedAnnotation;

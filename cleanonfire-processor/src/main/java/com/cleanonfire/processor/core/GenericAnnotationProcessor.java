@@ -21,7 +21,6 @@ public abstract class GenericAnnotationProcessor<T> {
     public abstract void process(Set<? extends Element> elements) throws ProcessingException;
 
 
-    protected abstract ElementValidator getValidator();
 
 
 }

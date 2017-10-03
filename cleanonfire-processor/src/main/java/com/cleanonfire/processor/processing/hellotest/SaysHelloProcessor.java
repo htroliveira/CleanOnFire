@@ -19,7 +19,6 @@ import java.util.Set;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
 
 /**
  * Created by heitorgianastasio on 02/10/17.
@@ -52,6 +51,8 @@ public class SaysHelloProcessor extends GenericAnnotationProcessor<SaysHello> {
                 .returns(void.class)
                 .addParameter(ClassName.get("android.content","Context"),"context")
                 .addStatement("$T.makeText(context,$S,$T.LENGTH_SHORT).show()",TOAST, "Hello,"+element.getSimpleName(),TOAST)
+                .beginControlFlow("")
+                .endControlFlow()
                 .build();
 
         TypeSpec helloWorld = TypeSpec.classBuilder("Hello"+element.getSimpleName())
@@ -69,8 +70,4 @@ public class SaysHelloProcessor extends GenericAnnotationProcessor<SaysHello> {
         }
     }
 
-    @Override
-    protected ElementValidator getValidator() {
-        return validator;
-    }
 }

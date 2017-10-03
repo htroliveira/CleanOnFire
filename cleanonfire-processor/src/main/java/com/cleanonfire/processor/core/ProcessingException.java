@@ -31,6 +31,10 @@ public class ProcessingException extends RuntimeException {
 
     }
 
+    public Element getElement() {
+        return element;
+    }
+
     public String getCompilerMessage() {
         StringBuilder stringBuilder = new StringBuilder()
                         .append(String.format("The %s %s ", element.getKind().toString().toLowerCase(), element.getSimpleName()))
