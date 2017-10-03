@@ -13,9 +13,9 @@ import java.util.List;
  */
 
 public abstract class BaseCleanDAO<T> {
-    SQLiteOpenHelper dbHelper;
+    SQLiteCleanHelper dbHelper;
 
-    public BaseCleanDAO(SQLiteOpenHelper dbHelper) {
+    public BaseCleanDAO(SQLiteCleanHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
 

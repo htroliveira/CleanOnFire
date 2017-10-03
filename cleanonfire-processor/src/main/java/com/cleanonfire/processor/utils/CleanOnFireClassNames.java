@@ -9,5 +9,6 @@ import com.squareup.javapoet.ClassName;
 public final class CleanOnFireClassNames {
     private CleanOnFireClassNames(){}
 
-    public static ClassName BASE_DAO = ClassName.get("","");
+    public static ClassName BASE_DAO = ClassName.get("com.cleanonfire.api.data.orm","BaseCleanDAO");
+    public static ClassName CLEAN_SQLITE_HELPER = ClassName.get("com.cleanonfire.api.data.orm","SQLiteCleanHelper");
 }
