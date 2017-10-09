@@ -18,6 +18,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import javax.tools.StandardLocation;
 
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
@@ -44,6 +45,7 @@ public class CleanOnFireProcessor extends AbstractProcessor {
                 processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR,pe.getCompilerMessage(),pe.getElement());
             }
         }
+
         return false;
     }
 

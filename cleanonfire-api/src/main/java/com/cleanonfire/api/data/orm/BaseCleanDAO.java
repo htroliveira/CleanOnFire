@@ -66,6 +66,16 @@ public abstract class BaseCleanDAO<T> {
         // TODO: 03/10/17 insert generic baseDAO
     }
 
+    public Number delete(T t){
+        return null;
+        // TODO: 03/10/17 insert generic baseDAO
+    }
+
+    public Number deleteById(Number id){
+        return null;
+        // TODO: 03/10/17 insert generic baseDAO
+    }
+
     protected Cursor queryFromCriteria(QueryCriteria criteria, SQLiteDatabase db){
         return db.query(
                 criteria.isDistinct(),

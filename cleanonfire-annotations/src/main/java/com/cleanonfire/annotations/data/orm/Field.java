@@ -4,13 +4,16 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Date;
 
 /**
- * Created by heitorgianastasio on 02/10/17.
+ * Created by heitorgianastasio on 07/10/17.
  */
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
-public @interface Entity {
-    String tableName() default "";
-    int version() default -1;
+public @interface Field {
+    boolean unique() default false;
+    String columnName() default "";
+    boolean nullable() default true;
+
 }
