@@ -6,4 +6,5 @@ package com.cleanonfire.annotations.data.orm.relationship;
 
 public @interface OneToOne {
     Class value();
+    boolean lazyLoading() default false;
 }

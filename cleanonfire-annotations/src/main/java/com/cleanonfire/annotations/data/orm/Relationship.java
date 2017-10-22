@@ -5,9 +5,11 @@ package com.cleanonfire.annotations.data.orm;
  */
 
 public @interface Relationship {
-    RelationType relation();
+    Type relation();
     Class with();
-    enum RelationType{
+    boolean lazyLoad() default false;
+
+    enum Type {
         ONE_TO_MANY,
         MANY_TO_MANY,
         ONE_TO_ONE,

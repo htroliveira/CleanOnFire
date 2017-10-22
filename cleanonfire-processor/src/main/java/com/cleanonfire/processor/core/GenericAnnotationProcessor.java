@@ -1,7 +1,5 @@
 package com.cleanonfire.processor.core;
 
-import java.lang.annotation.ElementType;
-import java.util.Map;
 import java.util.Set;
 
 import javax.lang.model.element.Element;

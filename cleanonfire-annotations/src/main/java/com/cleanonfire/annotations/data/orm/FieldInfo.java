@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface Field {
+public @interface FieldInfo {
     boolean unique() default false;
     String columnName() default "";
     boolean nullable() default true;

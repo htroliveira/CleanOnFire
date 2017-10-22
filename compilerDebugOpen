@@ -1,6 +1,6 @@
 
 
-echo './gradlew --no-daemon -Dorg.gradle.debug=true :app:clean :app:compileDebugJavaWithJavac' > ./temp.sh
+echo './gradlew --no-daemon --stacktrace -Dorg.gradle.debug=true :app:clean :app:compileDebugJavaWithJavac' > ./temp.sh
 chmod +x temp.sh
 if [[ -e /bin/gnome-terminal ]]; then
 

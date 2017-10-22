@@ -6,4 +6,6 @@ package com.cleanonfire.annotations.data.orm.relationship;
 
 public @interface OneToMany {
     Class value();
+    boolean lazyLoading() default false;
+
 }

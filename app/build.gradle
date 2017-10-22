@@ -39,7 +39,7 @@ dependencies {
     compile 'org.aspectj:aspectjrt:1.8.1'
 
     compile project(':cleanonfire-api')
-    debugCompile project(':cleanonfire-weaving')
+    //compile project(':cleanonfire-weaving')
     annotationProcessor project(':cleanonfire-processor')
     compile 'com.android.support:appcompat-v7:26.1.0'
     testCompile 'junit:junit:4.12'

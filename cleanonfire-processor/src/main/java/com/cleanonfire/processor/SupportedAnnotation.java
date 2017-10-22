@@ -7,7 +7,6 @@ import com.cleanonfire.processor.processing.data.orm.EntityOrmProcessor;
 import com.cleanonfire.processor.processing.hellotest.SaysHelloProcessor;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -1,7 +1,7 @@
 package com.cleanonfire.processor.processing.data.orm;
 
 import com.cleanonfire.annotations.data.orm.Entity;
-import com.cleanonfire.annotations.data.orm.Field;
+import com.cleanonfire.annotations.data.orm.FieldInfo;
 import com.cleanonfire.annotations.data.orm.IgnoreField;
 import com.cleanonfire.processor.core.ProcessingException;
 
@@ -37,7 +37,7 @@ public class DDLScriptBuilder {
         for (Element element : type.getEnclosedElements()) {
             if (element.getKind().isField()) {
                 StringBuilder columnBuilder = new StringBuilder();
-                Field field = element.getAnnotation(Field.class);
+                FieldInfo fieldInfo = element.getAnnotation(FieldInfo.class);
                 String columnName = "";
 
             }
@@ -58,9 +58,10 @@ public class DDLScriptBuilder {
 
     private String buildColumnDefinition(VariableElement element) {
         StringBuilder columnDefBuilder = new StringBuilder(" ");
-        Field field = element.getAnnotation(Field.class);
-        String columnName = getColumnName(element,field);
-        columnDefBuilder.append(columnName);
+        FieldInfo fieldInfo = element.getAnnotation(FieldInfo.class);
+        String columnName = getColumnName(element, fieldInfo);
+
+        columnDefBuilder.append(TypePersistence.forType(element.asType()).columnCreate(columnName));
 
 
 
@@ -71,7 +72,7 @@ public class DDLScriptBuilder {
         Entity entity = element.getAnnotation(Entity.class);
         return entity.tableName().isEmpty() ? element.getSimpleName().toString().toLowerCase() : entity.tableName();
     }
-    private String getColumnName(VariableElement element, Field field) {
-        return field.columnName().isEmpty() ? element.getSimpleName().toString() : field.columnName();
+    private String getColumnName(VariableElement element, FieldInfo fieldInfo) {
+        return fieldInfo.columnName().isEmpty() ? element.getSimpleName().toString() : fieldInfo.columnName();
     }
 }

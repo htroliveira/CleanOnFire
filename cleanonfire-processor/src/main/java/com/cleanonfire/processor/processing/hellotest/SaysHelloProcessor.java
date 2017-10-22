@@ -1,20 +1,17 @@
 package com.cleanonfire.processor.processing.hellotest;
 
 import com.cleanonfire.annotations.SaysHello;
-import com.cleanonfire.processor.core.ElementValidator;
-import com.cleanonfire.processor.core.ElementValidator.ValidationResult;
+import com.cleanonfire.processor.core.Validator.ValidationResult;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.core.ProcessingException;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.lang.model.element.Element;

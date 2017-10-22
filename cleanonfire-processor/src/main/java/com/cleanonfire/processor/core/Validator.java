@@ -1,5 +1,6 @@
 package com.cleanonfire.processor.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Element;
@@ -8,16 +9,20 @@ import javax.lang.model.element.Element;
  * Created by heitorgianastasio on 21/09/17.
  */
 
-public interface ElementValidator {
-    ValidationResult validate(Element elementToValidate) throws ProcessingException;
+public interface Validator<T> {
+    ValidationResult validate(T t) throws ProcessingException;
 
     class ValidationResult{
         private boolean valid;
-        private List<String> messages;
+        private List<String> messages = new ArrayList<>();
 
         public ValidationResult(boolean valid, List<String> messages) {
             this.valid = valid;
-            this.messages = messages;
+            this.messages.addAll(messages);
+        }
+
+        public ValidationResult(boolean valid) {
+            this.valid = valid;
         }
 
         public boolean isValid() {
