@@ -1,1 +1,1 @@
-include ':app', ':cleanonfire-processor', ':cleanonfire-api', ':cleanonfire-annotations', ':cleanonfire-weaving'
+include ':app', ':cleanonfire-processor', ':cleanonfire-api', ':cleanonfire-annotations'

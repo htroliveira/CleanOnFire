@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/cleanonfire-annotations" />
             <option value="$PROJECT_DIR$/cleanonfire-api" />
             <option value="$PROJECT_DIR$/cleanonfire-processor" />
-            <option value="$PROJECT_DIR$/cleanonfire-weaving" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

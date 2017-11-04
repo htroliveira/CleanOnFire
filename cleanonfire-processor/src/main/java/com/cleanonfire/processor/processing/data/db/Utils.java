@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
@@ -60,11 +61,7 @@ public class Utils {
 
     public static TypeName getForeignKeyTypeName(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
-        try {
-            return TypeName.get(foreignKey.target());
-        } catch (MirroredTypeException e) {
-            return TypeName.get(e.getTypeMirror());
-        }
+        return TypeName.get(getForeignKeyTypeMirror(foreignKey));
     }
     public static TypeMirror getForeignKeyTypeMirror(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
@@ -74,6 +71,9 @@ public class Utils {
             return e.getTypeMirror();
         }
         return null;
+    }public static TypeElement getForeignKeyTypeElement(ForeignKey foreignKey) {
+        if (foreignKey == null) return null;
+        return (TypeElement) ProcessingUtils.getTypeUtils().asElement(getForeignKeyTypeMirror(foreignKey));
     }
 
 

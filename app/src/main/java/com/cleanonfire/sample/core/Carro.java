@@ -6,6 +6,7 @@ import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import static com.cleanonfire.annotations.data.db.ForeignKey.DeletePolicy.ON_DELETE_CASCADE;
@@ -18,7 +19,7 @@ import static com.cleanonfire.annotations.data.db.ForeignKey.UpdatePolicy.ON_UPD
 public class Carro {
     @PrimaryKey(autoincrement = true)
     @FieldInfo(columnName = "idDoCarro")
-    private int id;
+    private Long id;
 
     @ForeignKey(target = Modelo.class, name = "modelo", update = ON_UPDATE_RESTRICT, delete = ON_DELETE_CASCADE)
     @FieldInfo(columnName = "modelo_id")
@@ -29,11 +30,11 @@ public class Carro {
     private Date fabricacao;
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
