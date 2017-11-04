@@ -10,5 +10,6 @@ public final class AndroidFrameworkClassNames {
     private AndroidFrameworkClassNames() {}
 
     public static ClassName CURSOR = ClassName.get("android.database","Cursor");
+    public static ClassName CONTEXT = ClassName.get("android.content","Context");
     public static ClassName CONTENT_VALUES = ClassName.get("android.content","ContentValues");
 }

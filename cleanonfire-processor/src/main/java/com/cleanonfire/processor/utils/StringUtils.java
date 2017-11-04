@@ -7,7 +7,8 @@ package com.cleanonfire.processor.utils;
 public final class StringUtils {
     private StringUtils(){}
 
-    public static String firstLetterToUp(String src){
+    public static String firstLetterToUp(CharSequence sequence){
+        String src = sequence.toString();
         return src.substring(0,1).toUpperCase()+src.substring(1,src.length());
     }
 }

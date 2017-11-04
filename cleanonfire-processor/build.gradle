@@ -6,6 +6,7 @@ dependencies {
     compile 'com.squareup:javapoet:1.9.0'
     compile project(':cleanonfire-annotations')
 
+    testCompile 'junit:junit:4.12'
 }
 
 sourceCompatibility = "1.8"

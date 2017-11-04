@@ -1,4 +1,4 @@
-package com.cleanonfire.annotations.data.orm;
+package com.cleanonfire.annotations.data.db;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

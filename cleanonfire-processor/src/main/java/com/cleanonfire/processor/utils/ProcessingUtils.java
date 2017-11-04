@@ -1,7 +1,6 @@
 package com.cleanonfire.processor.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.processing.Filer;
@@ -14,6 +13,8 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
+
+import static com.cleanonfire.processor.utils.StringUtils.firstLetterToUp;
 
 /**
  * Created by heitorgianastasio on 02/10/17.
@@ -46,25 +47,18 @@ public final class ProcessingUtils {
     }
 
     public static String getGetterName(Element element) {
-        String elementName = element.getSimpleName().toString();
-        StringBuilder builder = new StringBuilder("get");
-        builder.append(elementName.substring(0, 1).toUpperCase());
-        builder.append(elementName.substring(1, elementName.length()));
-        return builder.toString();
+        return new StringBuilder("get").append(firstLetterToUp(element.getSimpleName())).toString();
+
     }
 
     public static String getSetterName(Element element) {
-        String elementName = element.getSimpleName().toString();
-        StringBuilder builder = new StringBuilder("set");
-        builder.append(elementName.substring(0, 1).toUpperCase());
-        builder.append(elementName.substring(1, elementName.length()));
-        return builder.toString();
+        return new StringBuilder("set").append(firstLetterToUp(element.getSimpleName())).toString();
     }
 
     public static List<ExecutableElement> getPublicMethods(TypeElement typeElement) {
         List<ExecutableElement> result = new ArrayList<>();
         for (Element element : typeElement.getEnclosedElements()) {
-            if (element.getKind() == ElementKind.METHOD && !element.getModifiers().containsAll(Arrays.asList(Modifier.PRIVATE, Modifier.PROTECTED)))
+            if (element.getKind() == ElementKind.METHOD && !element.getModifiers().contains(Modifier.PRIVATE))
                 result.add((ExecutableElement) element);
         }
         return result;

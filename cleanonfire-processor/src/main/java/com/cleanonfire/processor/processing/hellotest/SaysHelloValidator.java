@@ -1,9 +1,7 @@
 package com.cleanonfire.processor.processing.hellotest;
 
-import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.core.ProcessingException;
-
-import java.util.Arrays;
+import com.cleanonfire.processor.core.Validator;
 
 import javax.lang.model.element.Element;
 

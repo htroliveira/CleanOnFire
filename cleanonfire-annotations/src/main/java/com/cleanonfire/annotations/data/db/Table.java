@@ -1,4 +1,4 @@
-package com.cleanonfire.annotations.data.orm;
+package com.cleanonfire.annotations.data.db;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Created by heitorgianastasio on 02/10/17.
  */
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface NotNull {
+@Target(ElementType.TYPE)
+public @interface Table {
+    String tableName() default "";
+    int version() default -1;
 }

@@ -1,6 +1,5 @@
-package com.cleanonfire.processor.processing.data.orm;
+package com.cleanonfire.processor.processing.data.db;
 
-import com.cleanonfire.annotations.data.orm.Entity;
 import com.cleanonfire.processor.core.ProcessingException;
 import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.utils.ArrayUtil;
@@ -17,7 +16,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeKind;
+
+import static com.cleanonfire.processor.processing.data.db.Utils.fieldToColumnName;
 
 /**
  * Created by heitorgianastasio on 02/10/17.
@@ -29,6 +29,8 @@ public class EntityOrmValidator implements Validator<DAOClassBundle> {
 
     @Override
     public ValidationResult validate(DAOClassBundle bundle) throws ProcessingException {
+        if(true) return new ValidationResult(true);
+
         if (!bundle.getMainElement().getKind().isClass())
             return new ValidationResult(false, Collections.singletonList(bundle.getMainElement().getSimpleName().toString().concat(" is not a class")));
 
@@ -66,7 +68,7 @@ public class EntityOrmValidator implements Validator<DAOClassBundle> {
         Set<String> duplicatedColumnNames =
                 ArrayUtil.getDuplicates(bundle.getFieldElements()
                         .stream()
-                        .map(DAOClassBundle.fieldToColumnName)
+                        .map(fieldToColumnName)
                         .collect(Collectors.toList()));
         if (!duplicatedColumnNames.isEmpty())
             return new ValidationResult(false, Collections.singletonList("The entity have duplicated columns: " + String.join(",", duplicatedColumnNames)));
@@ -76,10 +78,17 @@ public class EntityOrmValidator implements Validator<DAOClassBundle> {
     }
 
     private ValidationResult validateRelations(DAOClassBundle bundle) {
-        for (TypeElement element : bundle.getRelatedTypeElements()) {
-            if (element.getAnnotation(Entity.class) == null)
-                return new ValidationResult(false, Collections.singletonList(element.getSimpleName().toString().concat(" is related but is not a @Entity")));
+        /*for (TypeElement element : bundle.getRelatedTypeElements()) {
+            if (element.getAnnotation(Table.class) == null)
+                return new ValidationResult(false, Collections.singletonList(element.getSimpleName().toString().concat(" is related but is not a @Table")));
         }
+
+        for (VariableElement variableElement : bundle.getForeignKeyElements()) {
+            Relationship relationship = variableElement.getAnnotation(Relationship.class);
+            if(relationship.relation().equals(Relationship.Type.ONE_TO_ONE) && !ProcessingUtils.getTypeUtils().isSameType(variableElement.asType(),getTypeFromRelationship(relationship)))
+                return new ValidationResult(false, Collections.singletonList(variableElement.getSimpleName().toString().concat("'s type doesn't corresponds to its relation")));
+
+        }*/
 
         return new ValidationResult(true);
     }
@@ -90,10 +99,10 @@ public class EntityOrmValidator implements Validator<DAOClassBundle> {
         else if (bundle.getPrimaryKeyElements().size() < 1)
             return new ValidationResult(false, Collections.singletonList("A entity must have one primary key field "));
 
-        TypeKind typeKind = bundle.getPrimaryKeyElement().asType().getKind();
+      /*  TypeKind typeKind = bundle.getPrimaryKeyElement().asType().getKind();
         if (!typeKind.equals(TypeKind.INT) && !typeKind.equals(TypeKind.LONG)) {
             return new ValidationResult(false, Collections.singletonList("A @PrimaryKey field must be of 'long' or 'int' type"));
-        }
+        }*/
         return new ValidationResult(true);
     }
 

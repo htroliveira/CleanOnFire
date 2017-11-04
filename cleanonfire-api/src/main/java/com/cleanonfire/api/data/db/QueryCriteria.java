@@ -1,4 +1,4 @@
-package com.cleanonfire.api.data.orm;
+package com.cleanonfire.api.data.db;
 
 /**
  * Created by heitorgianastasio on 03/10/17.

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -45,5 +44,9 @@ public class ArrayUtil {
         return src.stream()
                 .filter(t -> Collections.frequency(src,t)>1)
                 .collect(Collectors.toSet());
+    }
+
+    public static <T> List<T> concat(List<T>... lists){
+        return Stream.of(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

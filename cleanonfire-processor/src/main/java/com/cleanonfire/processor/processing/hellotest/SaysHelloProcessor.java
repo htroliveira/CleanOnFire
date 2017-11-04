@@ -1,9 +1,9 @@
 package com.cleanonfire.processor.processing.hellotest;
 
 import com.cleanonfire.annotations.SaysHello;
-import com.cleanonfire.processor.core.Validator.ValidationResult;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.core.ProcessingException;
+import com.cleanonfire.processor.core.Validator.ValidationResult;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;

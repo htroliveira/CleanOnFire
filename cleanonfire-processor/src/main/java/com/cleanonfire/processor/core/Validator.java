@@ -3,8 +3,6 @@ package com.cleanonfire.processor.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.lang.model.element.Element;
-
 /**
  * Created by heitorgianastasio on 21/09/17.
  */

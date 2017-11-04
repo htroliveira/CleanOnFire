@@ -1,10 +1,5 @@
 package com.cleanonfire.weaving.orm;
 
-import android.util.Log;
-
-import com.cleanonfire.api.data.orm.LazyLoader;
-
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

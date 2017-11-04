@@ -1,20 +1,17 @@
-package com.cleanonfire.processor.processing.data.orm;
+package com.cleanonfire.processor.processing.data.db;
 
+import com.cleanonfire.processor.core.ProcessingException;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.lang.model.type.TypeMirror;
 
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.BYTEARRAY_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.DATE_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.DOUBLE_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.FLOAT_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.INTEGER_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.LONG_CLASSNAME;
-import static com.cleanonfire.processor.processing.data.orm.ORMSupportedClassNames.STRING_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.*;
 
 
 /**
@@ -25,10 +22,8 @@ public enum TypePersistence {
 
     DATE(DATE_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("INTEGER")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "INTEGER";
         }
 
         @Override
@@ -37,18 +32,16 @@ public enum TypePersistence {
         }
 
         @Override
-        public String contentValuesParsing() {
-            return ".getTime()";
+        public String contentValuesParsing(String retrieveField) {
+            return retrieveField+" != null? "+retrieveField+".getTime() : null";
         }
     },
 
 
     INT(TypeName.INT,INTEGER_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("INTEGER")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "INTEGER";
         }
 
         @Override
@@ -59,10 +52,8 @@ public enum TypePersistence {
 
     LONG(TypeName.LONG,LONG_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("INTEGER")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "INTEGER";
         }
 
         @Override
@@ -72,10 +63,8 @@ public enum TypePersistence {
     },
     STRING(STRING_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("VARCHAR")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "VARCHAR";
         }
 
         @Override
@@ -85,10 +74,8 @@ public enum TypePersistence {
     },
     BYTEARRAY(BYTEARRAY_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("BLOB")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "BLOB";
         }
 
         @Override
@@ -100,10 +87,8 @@ public enum TypePersistence {
 
     FLOAT(TypeName.FLOAT,FLOAT_CLASSNAME) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("REAL")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "REAL";
         }
 
         @Override
@@ -114,10 +99,8 @@ public enum TypePersistence {
 
     DOUBLE(DOUBLE_CLASSNAME,TypeName.DOUBLE) {
         @Override
-        public String columnCreate(String columnName) {
-            return new StringBuilder(columnName).append(" ")
-                    .append("REAL")
-                    .toString();
+        public String sqliteEquivalent() {
+            return "REAL";
         }
 
         @Override
@@ -142,15 +125,15 @@ public enum TypePersistence {
                     .contains(typeMirror.toString().replace("()", "")))
                 return typePersistence;
         }
-        return null;
+        throw new RuntimeException("Type "+typeMirror.toString()+" is not supported");
     }
 
-    public abstract String columnCreate(String columnName);
+    public abstract String sqliteEquivalent();
 
     public abstract Statement cursorParsing(String cursorVariableName, String columnName);
 
-    public String contentValuesParsing() {
-        return "";
+    public String contentValuesParsing(String retrieveField) {
+        return retrieveField;
     }
 
     public static class Statement {
@@ -169,5 +152,19 @@ public enum TypePersistence {
         public Object[] getArgs() {
             return args;
         }
+    }
+
+    public static final class ORMSupportedClassNames {
+
+        private ORMSupportedClassNames() {}
+
+        public static ClassName DATE_CLASSNAME = ClassName.get(Date.class);
+        public static ClassName STRING_CLASSNAME = ClassName.get(String.class);
+        public static ClassName INTEGER_CLASSNAME = ClassName.get(Integer.class);
+        public static ClassName FLOAT_CLASSNAME = ClassName.get(Float.class);
+        public static ClassName DOUBLE_CLASSNAME = ClassName.get(Double.class);
+        public static ClassName LONG_CLASSNAME = ClassName.get(Long.class);
+        public static TypeName BYTEARRAY_CLASSNAME = TypeName.get(byte[].class);
+
     }
 }
