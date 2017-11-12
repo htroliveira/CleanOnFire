@@ -1,5 +1,8 @@
 package com.cleanonfire.api.data.db;
 
+import java.util.Collections;
+import java.util.stream.Stream;
+
 /**
  * Created by heitorgianastasio on 03/10/17.
  */
@@ -94,6 +97,14 @@ public final class QueryCriteria {
             return this;
         }
 
+        public Builder setSelectionArgs(Object... selectionArgs) {
+            String[] args = new String[selectionArgs.length];
+            for (int i = 0; i < selectionArgs.length; i++) {
+                args[i] = String.valueOf(selectionArgs[i]);
+            }
+            queryCriteria.selectionArgs = args;
+            return this;
+        }
         public Builder setSelectionArgs(String... selectionArgs) {
             queryCriteria.selectionArgs = selectionArgs;
             return this;

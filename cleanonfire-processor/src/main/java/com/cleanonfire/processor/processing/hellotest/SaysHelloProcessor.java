@@ -14,6 +14,7 @@ import com.squareup.javapoet.TypeSpec;
 import java.io.IOException;
 import java.util.Set;
 
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
@@ -31,7 +32,7 @@ public class SaysHelloProcessor extends GenericAnnotationProcessor<SaysHello> {
     }
 
     @Override
-    public void process(Set<? extends Element> elements) throws ProcessingException {
+    public void process(Set<? extends Element> elements, RoundEnvironment env) throws ProcessingException {
         for (Element element : elements) {
             ValidationResult validation = validator.validate(element);
             if (validation.isValid()) {

@@ -35,7 +35,7 @@ public class IDClassBuilder implements ClassBuilder {
 
 
     private TypeSpec buildIdentificationClass(DAOClassBundle bundle) {
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(StringUtils.firstLetterToUp(bundle.getTableName()).concat("ID"))
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(StringUtils.firstLetterToUp(bundle.getMainElement().getSimpleName()).concat("ID"))
                 .addSuperinterface(IDENTIFICATION)
                 .addModifiers(Modifier.PUBLIC);
 

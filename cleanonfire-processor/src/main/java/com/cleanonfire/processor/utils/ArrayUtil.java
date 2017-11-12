@@ -1,5 +1,9 @@
 package com.cleanonfire.processor.utils;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,14 +20,16 @@ import java.util.stream.Stream;
 public class ArrayUtil {
 
 
-    public static <T>Object[] plain(T... objects){
+    public static Object[] plain(Object... objects){
         List<Object> list = new ArrayList<>();
-        for (T t : objects) {
+        for (Object t : objects) {
             if (t.getClass().isArray())
                 list.addAll(Arrays.asList(plain(castToArray(t))));
             else
                 list.add(t);
         }
+
+
         return list.toArray(new Object[list.size()]);
     }
 
@@ -49,4 +55,7 @@ public class ArrayUtil {
     public static <T> List<T> concat(List<T>... lists){
         return Stream.of(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }
+
+
+
 }

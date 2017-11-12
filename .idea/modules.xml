@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/cleanonfire-annotations/cleanonfire-annotations.iml" filepath="$PROJECT_DIR$/cleanonfire-annotations/cleanonfire-annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/cleanonfire-api/cleanonfire-api.iml" filepath="$PROJECT_DIR$/cleanonfire-api/cleanonfire-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/cleanonfire-processor/cleanonfire-processor.iml" filepath="$PROJECT_DIR$/cleanonfire-processor/cleanonfire-processor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cleanonfire-weaving/cleanonfire-weaving.iml" filepath="$PROJECT_DIR$/cleanonfire-weaving/cleanonfire-weaving.iml" />
     </modules>
   </component>
 </project>

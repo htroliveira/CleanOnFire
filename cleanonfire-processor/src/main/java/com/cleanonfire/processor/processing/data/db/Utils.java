@@ -8,8 +8,15 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
+import java.util.Set;
 import java.util.function.Function;
 
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -22,6 +29,13 @@ import javax.lang.model.type.TypeMirror;
  */
 
 public class Utils {
+    public static Function<VariableElement, String> fieldToColumnName = element -> {
+        FieldInfo fieldInfo = element.getAnnotation(FieldInfo.class);
+        if (fieldInfo != null && !fieldInfo.columnName().isEmpty())
+            return fieldInfo.columnName();
+        else return element.getSimpleName().toString();
+    };
+
     public static String assignField(Element element, String variable, String assignment) {
         if (element.getModifiers().contains(Modifier.PRIVATE)) {
             String setterName = ProcessingUtils.getSetterName(element);
@@ -48,7 +62,6 @@ public class Utils {
                 .build();
     }
 
-
     public static ClassName getForeignKeyDAOClassName(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
         try {
@@ -63,6 +76,7 @@ public class Utils {
         if (foreignKey == null) return null;
         return TypeName.get(getForeignKeyTypeMirror(foreignKey));
     }
+
     public static TypeMirror getForeignKeyTypeMirror(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
         try {
@@ -71,17 +85,15 @@ public class Utils {
             return e.getTypeMirror();
         }
         return null;
-    }public static TypeElement getForeignKeyTypeElement(ForeignKey foreignKey) {
+    }
+
+    public static TypeElement getForeignKeyTypeElement(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
         return (TypeElement) ProcessingUtils.getTypeUtils().asElement(getForeignKeyTypeMirror(foreignKey));
     }
 
 
-    public static Function<VariableElement, String> fieldToColumnName = element -> {
-        FieldInfo fieldInfo = element.getAnnotation(FieldInfo.class);
-        if (fieldInfo != null && !fieldInfo.columnName().isEmpty())
-            return fieldInfo.columnName();
-        else return element.getSimpleName().toString();
-    };
+
+
 
 }

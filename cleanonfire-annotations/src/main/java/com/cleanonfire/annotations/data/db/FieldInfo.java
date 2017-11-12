@@ -15,5 +15,6 @@ public @interface FieldInfo {
     String columnName() default "";
     String defaultValue() default "";
     boolean nullable() default true;
+    int length() default 0;
 
 }

@@ -1,21 +1,20 @@
-package com.cleanonfire.sample.core;
+package com.cleanonfire.sample.data.db;
 
 import com.cleanonfire.annotations.data.db.ForeignKey;
-import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
 
 /**
  * Created by heitorgianastasio on 28/10/17.
  */
-@Table
+@Table(tableName = "modelo_tem_peca")
 public class ModeloPeca {
     @PrimaryKey
-    @ForeignKey(target = Peca.class, name = "peca")
+    @ForeignKey(target = PecaEntity.class, name = "peca")
     private long idPeca;
 
     @PrimaryKey
-    @ForeignKey(target = Modelo.class,name = "modelo")
+    @ForeignKey(target = ModeloEntity.class,name = "modelo")
     private int idModelo;
 
     private int quantidade;

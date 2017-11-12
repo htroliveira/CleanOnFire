@@ -2,6 +2,7 @@ package com.cleanonfire.processor.core;
 
 import java.util.Set;
 
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 
 /**
@@ -16,7 +17,7 @@ public abstract class GenericAnnotationProcessor<T> {
         this.annotationClass = annotationClass;
     }
 
-    public abstract void process(Set<? extends Element> elements) throws ProcessingException;
+    public abstract void process(Set<? extends Element> elements, RoundEnvironment env) throws ProcessingException;
 
 
 

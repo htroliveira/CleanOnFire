@@ -9,18 +9,19 @@ public @interface ForeignKey {
 
     String name() default "";
 
-    UpdatePolicy update() default UpdatePolicy.NONE;
-    DeletePolicy delete() default DeletePolicy.NONE;
+    ForeignKeyPolicy update() default ForeignKeyPolicy.NO_ACTION;
+    ForeignKeyPolicy delete() default ForeignKeyPolicy.NO_ACTION;
 
-    enum DeletePolicy {
-        ON_DELETE_CASCADE,
-        ON_DELETE_RESTRICT,
-        NONE
-    }
 
-    enum UpdatePolicy {
-        ON_UPDATE_RESTRICT,
-        ON_UPDATE_CASCADE,
-        NONE
+    enum ForeignKeyPolicy {
+        RESTRICT,
+        CASCADE,
+        NO_ACTION,
+        SET_NULL,
+        SET_DEFAULT;
+
+        public String toSQL(){
+            return name().replace("_"," ");
+        }
     }
 }

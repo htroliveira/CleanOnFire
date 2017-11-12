@@ -31,7 +31,7 @@ import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTy
  * Created by heitorgianastasio on 02/10/17.
  */
 
-public class EntityOrmValidator implements Validator<DAOClassBundle> {
+public class TableDBValidator implements Validator<DAOClassBundle> {
     private List<String> tableNames = new ArrayList<>();
 
 
@@ -97,8 +97,12 @@ public class EntityOrmValidator implements Validator<DAOClassBundle> {
             TypeElement relatedTypeElement = getForeignKeyTypeElement(foreignKey);
             if(relatedTypeElement.getAnnotation(Table.class)==null)
                 return new ValidationResult(false, Collections.singletonList(variableElement.getSimpleName().toString().concat(" is not related to other Table")));
-            else if (DAOClassBundle.get(relatedTypeElement.asType()).hasCompositePrimaryKey())
+            else if (DAOClassBundle.get(relatedTypeElement).hasCompositePrimaryKey())
                 return new ValidationResult(false, Collections.singletonList("Foreign keys related with Composite Primary Key Tables are not supported yet"));
+            else if (!DAOClassBundle.get(relatedTypeElement).getPrimaryKeyElements().get(0).asType().equals(variableElement.asType())) {
+                String msg = String.format("%s must be of the same type of %s primary key",variableElement.getSimpleName(),relatedTypeElement.getSimpleName());
+                return new ValidationResult(false, Collections.singletonList(msg));
+            }
         }
 
         return new ValidationResult(true);

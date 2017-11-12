@@ -14,6 +14,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +32,8 @@ import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTy
 import static com.cleanonfire.processor.processing.data.db.Utils.retrieveField;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CONTENT_VALUES;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CURSOR;
+import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.SQLEXCEPTION;
+import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.SQLITEDATABASE;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.BASE_DAO;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.CLEAN_ON_FIRE_DB;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.CLEAN_SQLITE_HELPER;
@@ -59,7 +62,8 @@ public class DAOClassBuilder implements ClassBuilder {
                 buildParseToContentValues(bundle.getMainElement()),
                 buildGetId(bundle.getIdClassName()),
                 buildGetById(bundle),
-                buildDelete(bundle)
+                buildDelete(bundle),
+                buildInsertMethod(bundle)
 
         );
         String packageName = ProcessingUtils.getElementUtils().getPackageOf(bundle.getMainElement()).getQualifiedName().toString();
@@ -119,6 +123,25 @@ public class DAOClassBuilder implements ClassBuilder {
                 .build();
     }
 
+    private MethodSpec buildInsertMethod(DAOClassBundle bundle) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("insertOrThrow")
+                .addModifiers(Modifier.PROTECTED)
+                .returns(bundle.getIdClassName())
+                .addAnnotation(Override.class)
+                .addParameter(SQLITEDATABASE,"db")
+                .addParameter(TypeName.get(bundle.getMainElement().asType()),"item")
+                .addException(SQLEXCEPTION);
+        if (!bundle.hasCompositePrimaryKey() && bundle.getPrimaryKeyElements().get(0).getAnnotation(PrimaryKey.class).autoincrement()) {
+            TypeName primaryKeyType = TypeName.get(bundle.getPrimaryKeyElements().get(0).asType());
+            builder.addStatement("$1T id = ($1T)db.insertOrThrow(getTableName(),null,parseToContentValues(item))",primaryKeyType.unbox())
+                    .addStatement("return new $T(id)",bundle.getIdClassName());
+        } else {
+            builder.addStatement("db.insertOrThrow(getTableName(),null,parseToContentValues(item))")
+                    .addStatement("return new $T(item)",bundle.getIdClassName());
+        }
+        return builder.build();
+    }
+
     private MethodSpec buildDelete(DAOClassBundle bundle) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("deleteById")
                 .addModifiers(Modifier.PUBLIC)
@@ -167,7 +190,7 @@ public class DAOClassBuilder implements ClassBuilder {
     }
 
     private MethodSpec buildParseFromCursor(TypeElement typeElement) {
-        ClassName elementClassName = ClassName.bestGuess(typeElement.getQualifiedName().toString());
+        TypeName elementClassName = TypeName.get(typeElement.asType());
         MethodSpec.Builder builder = MethodSpec.methodBuilder("parseFromCursor")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PROTECTED)
@@ -181,11 +204,13 @@ public class DAOClassBuilder implements ClassBuilder {
             builder.addStatement(assignField(element, "result", statement.getStatement()), statement.getArgs());
         });
 
-        return builder.addStatement("return result").build();
+        return builder
+                .addStatement("return result")
+                .build();
     }
 
     private MethodSpec buildParseToContentValues(TypeElement typeElement) {
-        ClassName elementClassName = ClassName.bestGuess(typeElement.getQualifiedName().toString());
+        TypeName elementClassName = TypeName.get(typeElement.asType());
         MethodSpec.Builder builder = MethodSpec.methodBuilder("parseToContentValues")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PROTECTED)
@@ -195,9 +220,13 @@ public class DAOClassBuilder implements ClassBuilder {
         bundle.getFieldElements().forEach(element -> {
             TypePersistence typePersistence = TypePersistence.forType(element.asType());
             if (element.getAnnotation(PrimaryKey.class) != null || element.getAnnotation(ForeignKey.class) != null) {
-                builder.addCode("if ( $L > 0 ) ", retrieveField(element,"item"));
+                if (element.asType().getKind().isPrimitive())
+                    builder.addCode("if ( $L > 0 ) ", retrieveField(element, "item"));
+                else
+                    builder.addCode("if ( $L != null ) ", retrieveField(element, "item"));
             }
-            builder.addStatement("contentValues.put($S, $L)", fieldToColumnName.apply(element), typePersistence.contentValuesParsing(retrieveField(element, "item")));
+            TypePersistence.Statement statement = typePersistence.contentValuesParsing("contentValues",fieldToColumnName.apply(element),retrieveField(element, "item"));
+            builder.addStatement(statement.getStatement(),statement.getArgs());
 
         });
 

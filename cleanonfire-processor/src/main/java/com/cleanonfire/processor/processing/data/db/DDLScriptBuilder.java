@@ -57,16 +57,17 @@ public class DDLScriptBuilder {
         FieldInfo fieldInfo = element.getAnnotation(FieldInfo.class);
         String columnName = fieldToColumnName.apply(element);
         String type = TypePersistence.forType(element.asType()).sqliteEquivalent();
-        String unique ="";
-        String nullable ="";
-        String defaultValue ="";
-
-        if (fieldInfo!=null) {
+        String unique = "";
+        String nullable = "";
+        String defaultValue = "";
+        String length = "";
+        if (fieldInfo != null) {
             unique = fieldInfo.unique() ? "UNIQUE" : "";
             nullable = fieldInfo.nullable() ? "" : "NOT NULL";
-            defaultValue = fieldInfo.defaultValue();
+            defaultValue = !fieldInfo.defaultValue().isEmpty() ? "DEFAULT " + fieldInfo.defaultValue() : "";
+            length = fieldInfo.length() > 0 ? String.format("(%d)", fieldInfo.length()) : "";
         }
-        return String.format("%s %s %s %s %s", columnName, type, nullable, unique, defaultValue);
+        return String.format("%s %s%s %s %s %s", columnName, type, length, nullable, unique, defaultValue);
     }
 
 
@@ -90,8 +91,9 @@ public class DDLScriptBuilder {
         String columnName = fieldToColumnName.apply(element);
         String relatedTable = relatedTableBundle.getTableName();
         String relatedField = fieldToColumnName.apply(relatedTableBundle.getPrimaryKeyElements().get(0));
-
-        return String.format("FOREIGN KEY (%s) REFERENCES %s(%s)", columnName, relatedTable, relatedField);
+        String onDelete = "ON DELETE " + foreignKey.delete().toSQL();
+        String onUpdate = "ON UPDATE " + foreignKey.update().toSQL();
+        return String.format("FOREIGN KEY (%s) REFERENCES %s(%s) %s %s", columnName, relatedTable, relatedField, onDelete, onUpdate);
     }
 
     private DAOClassBundle getRelatedTableBundle(ForeignKey foreignKey) {

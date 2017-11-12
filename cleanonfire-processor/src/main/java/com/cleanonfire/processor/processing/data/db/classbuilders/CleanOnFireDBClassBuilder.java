@@ -23,18 +23,20 @@ import static com.cleanonfire.processor.utils.CleanOnFireClassNames.ABSTRACT_CLE
 public class CleanOnFireDBClassBuilder implements ClassBuilder {
     private static final String CLASS_NAME = "CleanOnFireDB";
     private static final String PACKAGE_NAME = "com.generated.cleanonfire.db";
-    private static final ClassName SELF_TYPE = ClassName.get(PACKAGE_NAME,CLASS_NAME);
+    private static final ClassName SELF_TYPE = ClassName.get(PACKAGE_NAME, CLASS_NAME);
 
     List<ClassName> daoNames = new ArrayList<>();
     String sqlCreateScript;
+    String dbName;
+    int version;
 
 
     @Override
     public JavaFile build() {
-        return JavaFile.builder(PACKAGE_NAME,buildCleanOnFireDB()).build();
+        return JavaFile.builder(PACKAGE_NAME, buildCleanOnFireDB()).build();
     }
 
-    private TypeSpec buildCleanOnFireDB(){
+    private TypeSpec buildCleanOnFireDB() {
         return TypeSpec
                 .classBuilder(CLASS_NAME)
                 .addModifiers(Modifier.PUBLIC)
@@ -43,64 +45,91 @@ public class CleanOnFireDBClassBuilder implements ClassBuilder {
                 .addMethod(buildGetSqlCreateScriptMethod())
                 .addMethod(buildInitMethod())
                 .addMethod(buildGetMethod())
+                .addMethod(buildGetDBNameMethod())
                 .addField(buildInstanceField())
                 .addMethod(buildConstructor())
+                .addMethod(buildGetVersion())
                 .build();
 
 
     }
 
 
-    MethodSpec buildConstructor(){
+    MethodSpec buildConstructor() {
         return MethodSpec
                 .constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(CONTEXT,"context")
+                .addParameter(CONTEXT, "context")
                 .addStatement("super(context)")
                 .build();
     }
 
-    FieldSpec buildInstanceField(){
-        return FieldSpec.builder(SELF_TYPE,"instance",Modifier.PRIVATE,Modifier.STATIC).build();
+    FieldSpec buildInstanceField() {
+        return FieldSpec.builder(SELF_TYPE, "instance", Modifier.PRIVATE, Modifier.STATIC).build();
     }
 
 
-    MethodSpec buildInitMethod(){
+    MethodSpec buildGetVersion() {
+        return MethodSpec
+                .methodBuilder("getVersion")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .returns(int.class)
+                .addStatement("return $L", version)
+                .build();
+    }
+
+    MethodSpec buildInitMethod() {
         return MethodSpec
                 .methodBuilder("init")
                 .returns(void.class)
-                .addModifiers(Modifier.PUBLIC,Modifier.STATIC)
-                .addParameter(CONTEXT,"context")
-                .addStatement("instance = new $T(context)",SELF_TYPE)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addParameter(CONTEXT, "context")
+                .addStatement("instance = new $T(context)", SELF_TYPE)
                 .build();
     }
-    MethodSpec buildGetMethod(){
+
+    MethodSpec buildGetMethod() {
         return MethodSpec
                 .methodBuilder("get")
                 .returns(SELF_TYPE)
-                .addModifiers(Modifier.PUBLIC,Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addStatement("return instance")
                 .build();
     }
 
-    MethodSpec buildGetSqlCreateScriptMethod(){
+    MethodSpec buildGetSqlCreateScriptMethod() {
         return MethodSpec
                 .methodBuilder("sqlCreateScript")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PROTECTED)
                 .returns(String.class)
-                .addStatement("return $S",sqlCreateScript)
+                .addStatement("return $S", sqlCreateScript)
                 .build();
     }
 
-    List<MethodSpec> buildGetDaoMethods(){
+    MethodSpec buildGetDBNameMethod() {
+        MethodSpec.Builder builder = MethodSpec
+                .methodBuilder("getDBName")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PROTECTED)
+                .returns(String.class);
+        if (dbName != null && !dbName.trim().isEmpty()) {
+            builder.addStatement("return $S", dbName);
+        } else {
+            builder.addStatement("return super.getDBName()");
+        }
+        return builder.build();
+    }
+
+    List<MethodSpec> buildGetDaoMethods() {
         List<MethodSpec> specs = new ArrayList<>();
         for (ClassName daoName : daoNames) {
             MethodSpec spec = MethodSpec
-                    .methodBuilder("get"+ StringUtils.firstLetterToUp(daoName.simpleName()))
+                    .methodBuilder("get" + StringUtils.firstLetterToUp(daoName.simpleName()))
                     .returns(daoName)
                     .addModifiers(Modifier.PUBLIC)
-                    .addStatement("return new $T(cleanHelper)",daoName)
+                    .addStatement("return new $T(cleanHelper)", daoName)
                     .build();
             specs.add(spec);
         }
@@ -111,7 +140,23 @@ public class CleanOnFireDBClassBuilder implements ClassBuilder {
         this.sqlCreateScript = sqlCreateScript;
     }
 
-    public void addDaoClassName(ClassName className){
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public void addDaoClassName(ClassName className) {
         daoNames.add(className);
     }
 

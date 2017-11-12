@@ -30,20 +30,25 @@ public final class ModificationCriteria {
     }
 
     public static class Builder {
-        ModificationCriteria queryCriteria = new ModificationCriteria();
+        ModificationCriteria modificationCriteria = new ModificationCriteria();
 
         public Builder setSelection(String selection) {
-            queryCriteria.selection = selection;
+            modificationCriteria.selection = selection;
             return this;
         }
 
-        public Builder setSelectionArgs(String... selectionArgs) {
-            queryCriteria.selectionArgs = selectionArgs;
+
+        public Builder setSelectionArgs(Object... selectionArgs) {
+            String[] args = new String[selectionArgs.length];
+            for (int i = 0; i < selectionArgs.length; i++) {
+                args[i] = String.valueOf(selectionArgs[i]);
+            }
+            modificationCriteria.selectionArgs = args;
             return this;
         }
 
         public ModificationCriteria build() {
-            return queryCriteria;
+            return modificationCriteria;
         }
 
     }

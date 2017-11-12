@@ -22,6 +22,8 @@ public abstract class AbstractCleanOnFireDB {
 
     protected abstract String sqlCreateScript();
 
+    protected abstract int getVersion();
+
     protected String getDBName() {
         return getApplicationName(context).concat("DB");
     }

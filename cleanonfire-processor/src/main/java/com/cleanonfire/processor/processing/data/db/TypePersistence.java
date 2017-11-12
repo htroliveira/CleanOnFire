@@ -1,6 +1,5 @@
 package com.cleanonfire.processor.processing.data.db;
 
-import com.cleanonfire.processor.core.ProcessingException;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
@@ -11,7 +10,13 @@ import java.util.stream.Collectors;
 
 import javax.lang.model.type.TypeMirror;
 
-import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.*;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.BYTEARRAY_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.DATE_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.DOUBLE_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.FLOAT_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.INTEGER_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.LONG_CLASSNAME;
+import static com.cleanonfire.processor.processing.data.db.TypePersistence.ORMSupportedClassNames.STRING_CLASSNAME;
 
 
 /**
@@ -32,13 +37,15 @@ public enum TypePersistence {
         }
 
         @Override
-        public String contentValuesParsing(String retrieveField) {
-            return retrieveField+" != null? "+retrieveField+".getTime() : null";
+        public Statement contentValuesParsing(String valuesVariableName, String columnName, String retrieveField) {
+            return new Statement("if($L != null) $L.put($S,$L.getTime())",retrieveField, valuesVariableName,columnName,retrieveField);
         }
+
+
     },
 
 
-    INT(TypeName.INT,INTEGER_CLASSNAME) {
+    INT(TypeName.INT, INTEGER_CLASSNAME) {
         @Override
         public String sqliteEquivalent() {
             return "INTEGER";
@@ -50,7 +57,7 @@ public enum TypePersistence {
         }
     },
 
-    LONG(TypeName.LONG,LONG_CLASSNAME) {
+    LONG(TypeName.LONG, LONG_CLASSNAME) {
         @Override
         public String sqliteEquivalent() {
             return "INTEGER";
@@ -85,7 +92,7 @@ public enum TypePersistence {
     },
 
 
-    FLOAT(TypeName.FLOAT,FLOAT_CLASSNAME) {
+    FLOAT(TypeName.FLOAT, FLOAT_CLASSNAME) {
         @Override
         public String sqliteEquivalent() {
             return "REAL";
@@ -97,7 +104,7 @@ public enum TypePersistence {
         }
     },
 
-    DOUBLE(DOUBLE_CLASSNAME,TypeName.DOUBLE) {
+    DOUBLE(DOUBLE_CLASSNAME, TypeName.DOUBLE) {
         @Override
         public String sqliteEquivalent() {
             return "REAL";
@@ -125,16 +132,16 @@ public enum TypePersistence {
                     .contains(typeMirror.toString().replace("()", "")))
                 return typePersistence;
         }
-        throw new RuntimeException("Type "+typeMirror.toString()+" is not supported");
+        throw new RuntimeException("Type " + typeMirror.toString() + " is not supported");
     }
 
     public abstract String sqliteEquivalent();
 
     public abstract Statement cursorParsing(String cursorVariableName, String columnName);
 
-    public String contentValuesParsing(String retrieveField) {
-        return retrieveField;
-    }
+    public Statement contentValuesParsing(String valuesVariableName, String columnName, String retrieveField){
+        return new Statement("$L.put($S,$L)",valuesVariableName,columnName,retrieveField);
+    };
 
     public static class Statement {
         String statement;
@@ -156,8 +163,6 @@ public enum TypePersistence {
 
     public static final class ORMSupportedClassNames {
 
-        private ORMSupportedClassNames() {}
-
         public static ClassName DATE_CLASSNAME = ClassName.get(Date.class);
         public static ClassName STRING_CLASSNAME = ClassName.get(String.class);
         public static ClassName INTEGER_CLASSNAME = ClassName.get(Integer.class);
@@ -165,6 +170,8 @@ public enum TypePersistence {
         public static ClassName DOUBLE_CLASSNAME = ClassName.get(Double.class);
         public static ClassName LONG_CLASSNAME = ClassName.get(Long.class);
         public static TypeName BYTEARRAY_CLASSNAME = TypeName.get(byte[].class);
+        private ORMSupportedClassNames() {
+        }
 
     }
 }

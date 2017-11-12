@@ -1,29 +1,27 @@
-package com.cleanonfire.sample.core;
+package com.cleanonfire.sample.data.db;
 
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
-import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import static com.cleanonfire.annotations.data.db.ForeignKey.DeletePolicy.ON_DELETE_CASCADE;
-import static com.cleanonfire.annotations.data.db.ForeignKey.UpdatePolicy.ON_UPDATE_RESTRICT;
+import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.CASCADE;
+import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.RESTRICT;
 
 /**
  * Created by heitorgianastasio on 26/10/17.
  */
 @Table(tableName = "carros")
-public class Carro {
+public class CarroEntity {
     @PrimaryKey(autoincrement = true)
     @FieldInfo(columnName = "idDoCarro")
     private Long id;
 
-    @ForeignKey(target = Modelo.class, name = "modelo", update = ON_UPDATE_RESTRICT, delete = ON_DELETE_CASCADE)
+    @ForeignKey(target = ModeloEntity.class, name = "modelo", update = RESTRICT, delete = CASCADE)
     @FieldInfo(columnName = "modelo_id")
-    private long modeloId;
+    private int modeloId;
 
     private String cor;
 
@@ -38,11 +36,11 @@ public class Carro {
         this.id = id;
     }
 
-    public long getModeloId() {
+    public int getModeloId() {
         return modeloId;
     }
 
-    public void setModeloId(long modeloId) {
+    public void setModeloId(int modeloId) {
         this.modeloId = modeloId;
     }
 

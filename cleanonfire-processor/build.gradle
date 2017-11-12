@@ -1,10 +1,10 @@
 apply plugin: 'java'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
-    compile 'com.squareup:javapoet:1.9.0'
-    compile project(':cleanonfire-annotations')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
+    implementation 'com.squareup:javapoet:1.9.0'
+    implementation project(':cleanonfire-annotations')
 
     testCompile 'junit:junit:4.12'
 }

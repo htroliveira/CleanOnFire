@@ -1,5 +1,6 @@
 package com.cleanonfire.processor.processing.data.db;
 
+import com.cleanonfire.annotations.data.db.Database;
 import com.cleanonfire.annotations.data.db.Table;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.core.ProcessingException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
@@ -22,18 +24,29 @@ import javax.lang.model.element.TypeElement;
  * Created by heitorgianastasio on 02/10/17.
  */
 
-public class EntityOrmProcessor extends GenericAnnotationProcessor<Table> {
-    private EntityOrmValidator validator = new EntityOrmValidator();
+public class DBProcessor extends GenericAnnotationProcessor<Database> {
+    private TableDBValidator validator = new TableDBValidator();
 
-    public EntityOrmProcessor(Class<Table> annotationClass) {
+    public DBProcessor(Class<Database> annotationClass) {
         super(annotationClass);
     }
 
     @Override
-    public void process(Set<? extends Element> elements) throws ProcessingException {
+    public void process(Set<? extends Element> elements, RoundEnvironment environment) throws ProcessingException {
         DDLScriptBuilder ddlScriptBuilder = new DDLScriptBuilder();
         CleanOnFireDBClassBuilder cleanOnFireDBClassBuilder = new CleanOnFireDBClassBuilder();
-        for (Element element : elements) {
+        if (elements.size()>1) {
+            throw new RuntimeException("You must have only one @Database specification");
+        }if (elements.size()<=0){
+            throw new RuntimeException("You must have at least one @Database specification");
+
+        }else{
+            Database db = elements.iterator().next().getAnnotation(Database.class);
+            cleanOnFireDBClassBuilder.setVersion(db.version());
+            cleanOnFireDBClassBuilder.setDbName(db.name());
+        }
+
+        for (Element element : environment.getElementsAnnotatedWith(Table.class)){
             DAOClassBundle bundle = DAOClassBundle.get((TypeElement) element);
             Validator.ValidationResult validation = validator.validate(bundle);
             if (validation.isValid()) {
@@ -42,12 +55,15 @@ public class EntityOrmProcessor extends GenericAnnotationProcessor<Table> {
                     JavaFile idFile = new IDClassBuilder(bundle).build();
                     buildFile(idFile);
                     ClassName idClassName = ClassName.get(idFile.packageName,idFile.typeSpec.name);
+
                     bundle.setIdClassName(idClassName);
                     JavaFile daoFile = new DAOClassBuilder(bundle).build();
                     buildFile(daoFile);
                     ClassName daoClassName = ClassName.get(daoFile.packageName,daoFile.typeSpec.name);
                     bundle.setIdClassName(idClassName);
                     cleanOnFireDBClassBuilder.addDaoClassName(daoClassName);
+
+
                 } catch (IOException e) {
                     throw new ProcessingException(annotationClass, element, Collections.singletonList("Was not possible to write the file"));
                 }

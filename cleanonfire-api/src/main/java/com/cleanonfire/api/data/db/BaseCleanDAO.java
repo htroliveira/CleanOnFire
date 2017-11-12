@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,12 +72,14 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
         return result;
     }
 
+    protected abstract I insertOrThrow(SQLiteDatabase db ,T t) throws SQLException;
+
+
     public I save(T t) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         try {
-            db.insertOrThrow(getTableName(), null, parseToContentValues(t));
-            return getId(t);
+            return insertOrThrow(db,t);
         } catch (SQLException e) {
             I id = getId(t);
             db.update(getTableName(), parseToContentValues(t), getIdentificationCondition(), id.identificationArgs());
