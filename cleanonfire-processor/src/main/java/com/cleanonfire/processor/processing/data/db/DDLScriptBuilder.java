@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypeException;
 
-import static com.cleanonfire.processor.processing.data.db.Utils.fieldToColumnName;
+import static com.cleanonfire.processor.processing.Utils.fieldToColumnName;
 
 /**
  * Created by heitorgianastasio on 08/10/17.
@@ -33,7 +33,7 @@ public class DDLScriptBuilder {
     }
 
     private String process(DAOClassBundle bundle) {
-        StringBuilder scriptBuilder = new StringBuilder("create table ");
+        StringBuilder scriptBuilder = new StringBuilder("create table if not exists ");
         scriptBuilder.append(bundle.getTableName()).append("(");
         for (VariableElement element : bundle.getFieldElements()) {
             scriptBuilder.append(buildColumnDefinition(element));

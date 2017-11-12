@@ -1,6 +1,5 @@
 package com.cleanonfire.processor.processing.data.db;
 
-import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
 import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
@@ -11,7 +10,6 @@ import com.squareup.javapoet.ClassName;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.lang.model.element.PackageElement;
@@ -34,8 +32,6 @@ public class DAOClassBundle {
     public static DAOClassBundle get(TypeMirror typeMirror){
         return BUNDLE_MAP.computeIfAbsent(typeMirror, m -> new DAOClassBundle((TypeElement) ProcessingUtils.getTypeUtils().asElement(m)));
     }
-
-
 
 
     private TypeElement mainElement;

@@ -7,7 +7,7 @@ import com.cleanonfire.annotations.data.db.Table;
 /**
  * Created by heitorgianastasio on 28/10/17.
  */
-@Table(tableName = "modelo_tem_peca")
+@Table(tableName = "modelo_peca")
 public class ModeloPeca {
     @PrimaryKey
     @ForeignKey(target = PecaEntity.class, name = "peca")

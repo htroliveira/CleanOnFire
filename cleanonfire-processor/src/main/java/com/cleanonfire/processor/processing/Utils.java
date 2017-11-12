@@ -1,22 +1,16 @@
-package com.cleanonfire.processor.processing.data.db;
+package com.cleanonfire.processor.processing;
 
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
+import com.cleanonfire.annotations.presentation.adapter.Bind;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.cleanonfire.processor.utils.StringUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
-import java.util.Set;
 import java.util.function.Function;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -62,6 +56,15 @@ public class Utils {
                 .build();
     }
 
+    public static MethodSpec buildSetterMethod(String variableName, TypeName type) {
+        return MethodSpec.methodBuilder("set".concat(StringUtils.firstLetterToUp(variableName)))
+                .addParameter(type, variableName)
+                .returns(void.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement("this.$1L = $1L", variableName)
+                .build();
+    }
+
     public static ClassName getForeignKeyDAOClassName(ForeignKey foreignKey) {
         if (foreignKey == null) return null;
         try {
@@ -92,8 +95,30 @@ public class Utils {
         return (TypeElement) ProcessingUtils.getTypeUtils().asElement(getForeignKeyTypeMirror(foreignKey));
     }
 
+    public static TypeName getBindViewTypeName(Bind bind) {
+        if (bind == null) return null;
+        return TypeName.get(getBindViewTypeMirror(bind));
+    }
 
+    public static TypeMirror getBindViewTypeMirror(Bind bind) {
+        if (bind == null) return null;
+        try {
+            bind.view();
+        } catch (MirroredTypeException e) {
+            return e.getTypeMirror();
+        }
+        return null;
+    }
 
+    public static TypeMirror getBinderTypeMirror(Bind bind) {
+        if (bind == null) return null;
+        try {
+            bind.binder();
+        } catch (MirroredTypeException e) {
+            return e.getTypeMirror();
+        }
+        return null;
+    }
 
 
 }

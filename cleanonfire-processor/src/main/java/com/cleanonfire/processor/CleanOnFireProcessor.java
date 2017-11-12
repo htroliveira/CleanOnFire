@@ -5,9 +5,6 @@ import com.cleanonfire.processor.core.ProcessingException;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.google.auto.service.AutoService;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
@@ -22,9 +19,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import javax.tools.FileObject;
-import javax.tools.JavaFileManager;
-import javax.tools.StandardLocation;
 
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)

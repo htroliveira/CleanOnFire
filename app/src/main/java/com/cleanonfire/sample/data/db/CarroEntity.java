@@ -23,6 +23,7 @@ public class CarroEntity {
     @FieldInfo(columnName = "modelo_id")
     private int modeloId;
 
+    @FieldInfo(length = 50)
     private String cor;
 
     private Date fabricacao;

@@ -14,4 +14,5 @@ public final class AndroidFrameworkClassNames {
     public static ClassName SQLEXCEPTION = ClassName.get("android.database","SQLException");
     public static ClassName CONTEXT = ClassName.get("android.content","Context");
     public static ClassName CONTENT_VALUES = ClassName.get("android.content","ContentValues");
+    public static ClassName VIEW = ClassName.get("android.view","View");
 }

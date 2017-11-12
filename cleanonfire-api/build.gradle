@@ -36,5 +36,6 @@ dependencies {
     })
     api project(':cleanonfire-annotations')
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    api 'com.android.support:recyclerview-v7:26.1.0'
     testCompile 'junit:junit:4.12'
 }

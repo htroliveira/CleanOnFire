@@ -9,9 +9,6 @@ public final class ModificationCriteria {
     String selection;
     String[] selectionArgs;
 
-    public static Builder builder() {
-        return new Builder();
-    }
 
     public String getSelection() {
         return selection;
@@ -29,27 +26,15 @@ public final class ModificationCriteria {
         this.selectionArgs = selectionArgs;
     }
 
-    public static class Builder {
-        ModificationCriteria modificationCriteria = new ModificationCriteria();
 
-        public Builder setSelection(String selection) {
-            modificationCriteria.selection = selection;
-            return this;
+    public static ModificationCriteria create(String selection, Object... selectionArgs) {
+        ModificationCriteria criteria = new ModificationCriteria();
+        criteria.selection = selection;
+        String[] args = new String[selectionArgs.length];
+        for (int i = 0; i < selectionArgs.length; i++) {
+            args[i] = String.valueOf(selectionArgs[i]);
         }
-
-
-        public Builder setSelectionArgs(Object... selectionArgs) {
-            String[] args = new String[selectionArgs.length];
-            for (int i = 0; i < selectionArgs.length; i++) {
-                args[i] = String.valueOf(selectionArgs[i]);
-            }
-            modificationCriteria.selectionArgs = args;
-            return this;
-        }
-
-        public ModificationCriteria build() {
-            return modificationCriteria;
-        }
-
+        criteria.selectionArgs = args;
+        return criteria;
     }
 }

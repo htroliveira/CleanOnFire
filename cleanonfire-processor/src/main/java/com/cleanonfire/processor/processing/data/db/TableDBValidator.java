@@ -21,11 +21,9 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
 
-import static com.cleanonfire.processor.processing.data.db.Utils.fieldToColumnName;
-import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTypeElement;
-import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTypeMirror;
+import static com.cleanonfire.processor.processing.Utils.fieldToColumnName;
+import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeElement;
 
 /**
  * Created by heitorgianastasio on 02/10/17.

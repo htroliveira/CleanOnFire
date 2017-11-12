@@ -1,8 +1,10 @@
 package com.cleanonfire.processor;
 
+import com.cleanonfire.annotations.presentation.adapter.VisualizationModel;
 import com.cleanonfire.annotations.data.db.Database;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.processing.data.db.DBProcessor;
+import com.cleanonfire.processor.processing.presentation.adapter.VisualizationModelProcessor;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -14,7 +16,8 @@ import java.util.Set;
 
 public enum SupportedAnnotation {
 
-    ORM_ENTITY(Database.class, new DBProcessor(Database.class));
+    DATABASE(Database.class, new DBProcessor(Database.class)),
+    VISUALIZATION_MODEL(VisualizationModel.class,new VisualizationModelProcessor(VisualizationModel.class));
 
     SupportedAnnotation(Class<? extends Annotation> supportedAnnotation, GenericAnnotationProcessor processor) {
         this.supportedAnnotation = supportedAnnotation;

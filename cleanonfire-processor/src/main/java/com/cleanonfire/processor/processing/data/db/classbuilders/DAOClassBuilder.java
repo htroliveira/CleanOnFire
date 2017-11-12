@@ -14,7 +14,6 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,12 +23,12 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
-import static com.cleanonfire.processor.processing.data.db.Utils.assignField;
-import static com.cleanonfire.processor.processing.data.db.Utils.fieldToColumnName;
-import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyDAOClassName;
-import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTypeMirror;
-import static com.cleanonfire.processor.processing.data.db.Utils.getForeignKeyTypeName;
-import static com.cleanonfire.processor.processing.data.db.Utils.retrieveField;
+import static com.cleanonfire.processor.processing.Utils.assignField;
+import static com.cleanonfire.processor.processing.Utils.fieldToColumnName;
+import static com.cleanonfire.processor.processing.Utils.getForeignKeyDAOClassName;
+import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeMirror;
+import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeName;
+import static com.cleanonfire.processor.processing.Utils.retrieveField;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CONTENT_VALUES;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CURSOR;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.SQLEXCEPTION;

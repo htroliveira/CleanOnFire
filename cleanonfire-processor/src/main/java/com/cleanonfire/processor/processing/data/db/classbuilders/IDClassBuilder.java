@@ -14,7 +14,8 @@ import java.util.List;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
 
-import static com.cleanonfire.processor.processing.data.db.Utils.*;
+import static com.cleanonfire.processor.processing.Utils.buildGetterMethod;
+import static com.cleanonfire.processor.processing.Utils.retrieveField;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.IDENTIFICATION;
 
 /**

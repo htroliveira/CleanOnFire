@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,14 +71,14 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
         return result;
     }
 
-    protected abstract I insertOrThrow(SQLiteDatabase db ,T t) throws SQLException;
+    protected abstract I insertOrThrow(SQLiteDatabase db, T t) throws SQLException;
 
 
     public I save(T t) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         try {
-            return insertOrThrow(db,t);
+            return insertOrThrow(db, t);
         } catch (SQLException e) {
             I id = getId(t);
             db.update(getTableName(), parseToContentValues(t), getIdentificationCondition(), id.identificationArgs());
@@ -105,10 +104,22 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
 
     }
 
-    public int update(ContentValues values,ModificationCriteria criteria){
-        try(SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            return db.update(getTableName(),values,criteria.getSelection(),criteria.selectionArgs);
+    public int update(ContentValues values, ModificationCriteria criteria) {
+        try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
+            return db.update(getTableName(), values, criteria.getSelection(), criteria.selectionArgs);
         }
+    }
+
+    public List<I> delete(List<T> elements) {
+        List<I> idList = new ArrayList<>();
+        for (T element : elements) {
+            idList.add(deleteById(getId(element)));
+        }
+        return idList;
+    }
+
+    public List<I> delete(T... elements) {
+        return delete(Arrays.asList(elements));
     }
 
     public I delete(T t) {
@@ -117,14 +128,17 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
 
     protected I deleteById(I id) {
         try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            db.delete(getTableName(), getIdentificationCondition(), id.identificationArgs());
-            return id;
+            int rows = db.delete(getTableName(), getIdentificationCondition(), id.identificationArgs());
+            if (rows > 0)
+                return id;
+            else
+                return null;
         }
     }
 
-    protected int delete(ModificationCriteria criteria) {
+    public int delete(ModificationCriteria criteria) {
         try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            return db.delete(getTableName(), criteria.getSelection(), criteria.selectionArgs);
+            return db.delete(getTableName(), criteria.getSelection(), criteria.getSelectionArgs());
         }
     }
 
@@ -155,7 +169,7 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
     }
 
 
-    public  interface Identification {
+    public interface Identification {
         String[] identificationArgs();
     }
 }
