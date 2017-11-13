@@ -24,6 +24,7 @@ import javax.lang.model.type.TypeKind;
 
 import static com.cleanonfire.processor.processing.Utils.fieldToColumnName;
 import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeElement;
+import static com.cleanonfire.processor.processing.Utils.verifyPublicGetterAndSetters;
 
 /**
  * Created by heitorgianastasio on 02/10/17.
@@ -64,7 +65,7 @@ public class TableDBValidator implements Validator<DAOClassBundle> {
     private ValidationResult validateFields(DAOClassBundle bundle) {
         for (VariableElement element : bundle.getFieldElements()) {
             if (!verifyPublicGetterAndSetters(element)) {
-                String msg = String.format("The '%s' field is private or protected and does't have valid and public getters and setters", element.getSimpleName().toString());
+                String msg = String.format("The '%s' field is private and does't have valid and public getters and setters", element.getSimpleName().toString());
                 return new ValidationResult(false, Collections.singletonList(msg));
             }
             try{
@@ -122,33 +123,6 @@ public class TableDBValidator implements Validator<DAOClassBundle> {
         return new ValidationResult(true);
     }
 
-    private boolean verifyPublicGetterAndSetters(Element fieldElement) {
-        if (fieldElement.getModifiers().contains(Modifier.PRIVATE) ||
-                fieldElement.getModifiers().contains(Modifier.PROTECTED)) {
 
-            String getterName = ProcessingUtils.getGetterName(fieldElement);
-            String setterName = ProcessingUtils.getSetterName(fieldElement);
-
-            return ProcessingUtils.getPublicMethods((TypeElement) fieldElement.getEnclosingElement())
-                    .stream()
-                    .filter(
-                            method ->
-                                    (method.getSimpleName().toString().equals(getterName) &&
-                                            method.asType().toString().replace("()", "").equals(fieldElement.asType().toString()) &&
-                                            method.getParameters().isEmpty() &&
-                                            !method.getModifiers().contains(Modifier.PROTECTED) &&
-                                            !method.getModifiers().contains(Modifier.PRIVATE))
-                                            ||//or
-                                            (method.getSimpleName().toString().equals(setterName) &&
-                                                    method.getParameters().get(0).asType().equals(fieldElement.asType()) &&
-                                                    !method.getModifiers().contains(Modifier.PROTECTED) &&
-                                                    !method.getModifiers().contains(Modifier.PRIVATE))
-                    )
-                    .map(element -> element.getSimpleName().toString())
-                    .collect(Collectors.toList())
-                    .containsAll(Arrays.asList(getterName, setterName));
-
-        } else return true;
-    }
 
 }

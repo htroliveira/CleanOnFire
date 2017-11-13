@@ -13,9 +13,9 @@ import java.util.List;
  */
 
 public abstract class BaseListAdapter<T, B extends ViewHolderBinder<T,VH>, VH extends ViewHolder> extends BaseAdapter {
-    Context context;
-    List<T> list;
-    B binder;
+    protected Context context;
+    protected List<T> list;
+    protected B binder;
 
     public BaseListAdapter(List<T> list, Context context, B binder) {
         this.context = context;

@@ -3,19 +3,24 @@ package com.cleanonfire.processor.processing;
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
 import com.cleanonfire.annotations.presentation.adapter.Bind;
+import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.cleanonfire.processor.utils.StringUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
 /**
@@ -118,6 +123,34 @@ public class Utils {
             return e.getTypeMirror();
         }
         return null;
+    }
+
+    public static boolean verifyPublicGetterAndSetters(Element fieldElement) {
+        if (fieldElement.getModifiers().contains(Modifier.PRIVATE)) {
+
+            String getterName = ProcessingUtils.getGetterName(fieldElement);
+            String setterName = ProcessingUtils.getSetterName(fieldElement);
+
+            return ProcessingUtils.getPublicMethods((TypeElement) fieldElement.getEnclosingElement())
+                    .stream()
+                    .filter(
+                            method ->
+                                    (method.getSimpleName().toString().equals(getterName) &&
+                                            method.asType().toString().replace("()", "").equals(fieldElement.asType().toString()) &&
+                                            method.getParameters().isEmpty() &&
+                                            !method.getModifiers().contains(Modifier.PROTECTED) &&
+                                            !method.getModifiers().contains(Modifier.PRIVATE))
+                                            ||//or
+                                            (method.getSimpleName().toString().equals(setterName) &&
+                                                    method.getParameters().get(0).asType().equals(fieldElement.asType()) &&
+                                                    !method.getModifiers().contains(Modifier.PROTECTED) &&
+                                                    !method.getModifiers().contains(Modifier.PRIVATE))
+                    )
+                    .map(element -> element.getSimpleName().toString())
+                    .collect(Collectors.toList())
+                    .containsAll(Arrays.asList(getterName, setterName));
+
+        } else return true;
     }
 
 

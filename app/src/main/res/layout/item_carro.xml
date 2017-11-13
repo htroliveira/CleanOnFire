@@ -9,15 +9,16 @@
         android:id="@+id/tvModelo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
         android:text="TextView" />
 
-    <CheckBox
+    <TextView
         android:id="@+id/tvAno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ano" />
 
-    <Button
+    <TextView
         android:id="@+id/tvCor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,20 +8,35 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * Created by heitorgianastasio on 17/10/17.
  */
-public interface PostThread {
+public abstract class PostThread {
 
 
     static PostThread MAIN_THREAD() {
-        return runnable -> new Handler(Looper.getMainLooper()).post(runnable);
+        return new PostThread() {
+            @Override
+            public void post(Runnable runnable) {
+                new Handler(Looper.getMainLooper()).post(runnable);
+            }
+        };
     }
 
     static PostThread WORKER_THREAD(ThreadPoolExecutor executor) {
-        return executor::execute;
+        return new PostThread() {
+            @Override
+            public void post(Runnable runnable) {
+                executor.execute(runnable);
+            }
+        };
     }
 
     static PostThread CURRENT_THREAD() {
-        return Runnable::run;
+        return new PostThread() {
+            @Override
+            public void post(Runnable runnable) {
+                runnable.run();
+            }
+        };
     }
 
-    void post(Runnable runnable);
+    public abstract void post(Runnable runnable);
 }
