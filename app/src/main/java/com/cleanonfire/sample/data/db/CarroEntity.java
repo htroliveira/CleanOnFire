@@ -2,7 +2,6 @@ package com.cleanonfire.sample.data.db;
 
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
-import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
 

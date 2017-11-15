@@ -1,9 +1,7 @@
 package com.cleanonfire.sample.data.db;
 
-import com.cleanonfire.R;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
-import com.cleanonfire.annotations.presentation.adapter.VisualizationModel;
 
 /**
  * Created by heitorgianastasio on 28/10/17.

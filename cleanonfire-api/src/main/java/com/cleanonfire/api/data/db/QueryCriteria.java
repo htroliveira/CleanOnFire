@@ -1,8 +1,5 @@
 package com.cleanonfire.api.data.db;
 
-import java.util.Collections;
-import java.util.stream.Stream;
-
 /**
  * Created by heitorgianastasio on 03/10/17.
  */

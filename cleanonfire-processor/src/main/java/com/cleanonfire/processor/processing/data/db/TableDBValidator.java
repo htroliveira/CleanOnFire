@@ -5,19 +5,15 @@ import com.cleanonfire.annotations.data.db.Table;
 import com.cleanonfire.processor.core.ProcessingException;
 import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.utils.ArrayUtil;
-import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;

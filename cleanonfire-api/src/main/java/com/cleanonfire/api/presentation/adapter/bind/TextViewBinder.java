@@ -1,7 +1,6 @@
 package com.cleanonfire.api.presentation.adapter.bind;
 
 
-import android.view.View;
 import android.widget.TextView;
 
 import com.cleanonfire.api.presentation.adapter.ViewBinder;

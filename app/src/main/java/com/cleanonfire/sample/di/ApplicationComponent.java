@@ -9,7 +9,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import dagger.Module;
 
 /**
  * Created by heitorgianastasio on 13/11/17.

@@ -1,7 +1,7 @@
 package com.cleanonfire.processor;
 
-import com.cleanonfire.annotations.presentation.adapter.VisualizationModel;
 import com.cleanonfire.annotations.data.db.Database;
+import com.cleanonfire.annotations.presentation.adapter.VisualizationModel;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.processing.data.db.DBProcessor;
 import com.cleanonfire.processor.processing.presentation.adapter.VisualizationModelProcessor;

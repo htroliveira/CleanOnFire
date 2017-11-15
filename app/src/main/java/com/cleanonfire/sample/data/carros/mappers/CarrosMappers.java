@@ -4,7 +4,6 @@ import com.cleanonfire.api.core.Mapper;
 import com.cleanonfire.sample.core.carros.model.Carro;
 import com.cleanonfire.sample.core.modelos.model.Modelo;
 import com.cleanonfire.sample.data.db.CarroEntity;
-import com.cleanonfire.sample.data.db.CarroEntityCleanDAO;
 import com.cleanonfire.sample.data.db.ModeloEntity;
 
 import java.util.ArrayList;

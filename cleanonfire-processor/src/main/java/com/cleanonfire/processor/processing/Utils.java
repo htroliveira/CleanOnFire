@@ -3,7 +3,6 @@ package com.cleanonfire.processor.processing;
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
 import com.cleanonfire.annotations.presentation.adapter.Bind;
-import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.cleanonfire.processor.utils.StringUtils;
 import com.squareup.javapoet.ClassName;
@@ -18,9 +17,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
 /**

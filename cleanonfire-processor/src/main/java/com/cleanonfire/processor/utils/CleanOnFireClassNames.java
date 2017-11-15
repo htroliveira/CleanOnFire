@@ -1,10 +1,6 @@
 package com.cleanonfire.processor.utils;
 
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-
-import javax.lang.model.type.TypeMirror;
 
 /**
  * Created by heitorgianastasio on 03/10/17.

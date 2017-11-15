@@ -4,7 +4,6 @@ import com.cleanonfire.annotations.presentation.adapter.Bind;
 import com.cleanonfire.processor.core.ClassBuilder;
 import com.cleanonfire.processor.processing.Utils;
 import com.cleanonfire.processor.processing.presentation.adapter.AdapterClassBundle;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -20,11 +19,6 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
-import static com.cleanonfire.annotations.presentation.adapter.VisualizationModel.AdapterType.RECYCLERVIEW;
-import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CONTEXT;
-import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.VIEW;
-import static com.cleanonfire.processor.utils.CleanOnFireClassNames.BASE_LIST_ADAPTER;
-import static com.cleanonfire.processor.utils.CleanOnFireClassNames.BASE_RV_ADAPTER;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.VIEW_HOLDER_BINDER;
 
 /**

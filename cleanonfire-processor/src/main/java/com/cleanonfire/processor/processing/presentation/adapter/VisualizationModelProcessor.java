@@ -9,10 +9,8 @@ import com.cleanonfire.processor.processing.presentation.adapter.classbuilders.A
 import com.cleanonfire.processor.processing.presentation.adapter.classbuilders.ViewHolderBinderClassBuilder;
 import com.cleanonfire.processor.processing.presentation.adapter.classbuilders.ViewHolderClassBuilder;
 import com.cleanonfire.processor.utils.ProcessingUtils;
-import com.squareup.javapoet.JavaFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 

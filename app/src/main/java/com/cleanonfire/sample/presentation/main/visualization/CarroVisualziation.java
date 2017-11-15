@@ -5,10 +5,8 @@ import android.widget.TextView;
 import com.cleanonfire.R;
 import com.cleanonfire.annotations.presentation.adapter.Bind;
 import com.cleanonfire.annotations.presentation.adapter.VisualizationModel;
-import com.cleanonfire.api.presentation.adapter.bind.CompoundViewBinder;
 import com.cleanonfire.api.presentation.adapter.bind.TextViewBinder;
 
-import static com.cleanonfire.annotations.presentation.adapter.VisualizationModel.AdapterType.LISTVIEW;
 import static com.cleanonfire.annotations.presentation.adapter.VisualizationModel.AdapterType.RECYCLERVIEW;
 
 /**
