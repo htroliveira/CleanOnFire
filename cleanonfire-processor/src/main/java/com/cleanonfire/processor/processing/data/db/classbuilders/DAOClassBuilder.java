@@ -30,12 +30,12 @@ import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeMirror
 import static com.cleanonfire.processor.processing.Utils.getForeignKeyTypeName;
 import static com.cleanonfire.processor.processing.Utils.retrieveField;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CONTENT_VALUES;
-import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.CURSOR;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.SQLEXCEPTION;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.SQLITEDATABASE;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.BASE_DAO;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.CLEAN_ON_FIRE_DB;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.CLEAN_SQLITE_HELPER;
+import static com.cleanonfire.processor.utils.CleanOnFireClassNames.CURSOR_READER;
 
 /**
  * Created by heitorgianastasio on 08/10/17.
@@ -190,11 +190,11 @@ public class DAOClassBuilder implements ClassBuilder {
 
     private MethodSpec buildParseFromCursor(TypeElement typeElement) {
         TypeName elementClassName = TypeName.get(typeElement.asType());
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("parseFromCursor")
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("parseFromCursorReader")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PROTECTED)
                 .returns(elementClassName)
-                .addParameter(CURSOR, "cursor")
+                .addParameter(CURSOR_READER, "cursor")
                 .addStatement("$T result = new $T()", elementClassName, elementClassName);
 
         bundle.getFieldElements().forEach(element -> {

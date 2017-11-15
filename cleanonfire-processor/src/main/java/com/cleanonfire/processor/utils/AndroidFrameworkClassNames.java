@@ -9,7 +9,6 @@ import com.squareup.javapoet.ClassName;
 public final class AndroidFrameworkClassNames {
     private AndroidFrameworkClassNames() {}
 
-    public static ClassName CURSOR = ClassName.get("android.database","Cursor");
     public static ClassName SQLITEDATABASE = ClassName.get("android.database.sqlite","SQLiteDatabase");
     public static ClassName SQLEXCEPTION = ClassName.get("android.database","SQLException");
     public static ClassName CONTEXT = ClassName.get("android.content","Context");

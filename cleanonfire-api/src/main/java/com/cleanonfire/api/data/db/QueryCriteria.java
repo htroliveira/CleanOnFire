@@ -98,11 +98,7 @@ public final class QueryCriteria {
         }
 
         public Builder setSelectionArgs(Object... selectionArgs) {
-            String[] args = new String[selectionArgs.length];
-            for (int i = 0; i < selectionArgs.length; i++) {
-                args[i] = String.valueOf(selectionArgs[i]);
-            }
-            queryCriteria.selectionArgs = args;
+            queryCriteria.selectionArgs = Utils.parseToStringArray(selectionArgs);
             return this;
         }
         public Builder setSelectionArgs(String... selectionArgs) {

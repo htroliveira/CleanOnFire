@@ -1,7 +1,11 @@
 package com.cleanonfire.sample.data.carros;
 
+import com.cleanonfire.api.data.db.AbstractCleanOnFireDB;
+import com.cleanonfire.api.data.db.CleanCursorReader;
+import com.cleanonfire.api.data.db.QueryCriteria;
 import com.cleanonfire.sample.core.carros.model.Carro;
 import com.cleanonfire.sample.core.carros.repository.CarrosRepository;
+import com.cleanonfire.sample.core.modelos.model.Modelo;
 import com.cleanonfire.sample.data.carros.mappers.CarrosMappers;
 import com.cleanonfire.sample.data.db.CarroEntity;
 import com.cleanonfire.sample.data.db.CarroEntityCleanDAO;
@@ -26,7 +30,9 @@ public class CarrosRepositoryImpl implements CarrosRepository {
 
     @Override
     public List<Carro> getAll() {
+
         List<Carro> carros = new ArrayList<>();
+        //CleanOnFireDB.get().getCarroEntityCleanDAO().query(QueryCriteria.builder().setSelection("id_wtf = ? AND date_1 between ? and ?",))
         for (CarroEntity entity : dao.getAll()) {
             Carro carro = CarrosMappers.ENTITY_TO_CARRO.map(entity);
             carro.setModelo(CarrosMappers.ENTITY_TO_MODELO.map(modeloDao.getById(entity.getModeloId())));

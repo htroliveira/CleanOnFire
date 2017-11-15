@@ -25,7 +25,7 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
 
     protected abstract String getTableName();
 
-    protected abstract T parseFromCursor(Cursor cursor);
+    protected abstract T parseFromCursorReader(CleanCursorReader cursor);
 
     protected abstract ContentValues parseToContentValues(T t);
 
@@ -35,9 +35,10 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
         try (SQLiteDatabase db = dbHelper.getReadableDatabase()) {
             Cursor cursor = queryFromCriteria(QueryCriteria.EMPTY, db);
             List<T> result = new ArrayList<>();
+            CleanCursorReader reader = new CleanCursorReader(cursor);
             if (cursor.moveToFirst()) {
                 do {
-                    result.add(parseFromCursor(cursor));
+                    result.add(parseFromCursorReader(reader));
                 } while (cursor.moveToNext());
             }
             return result;
@@ -51,8 +52,9 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
                 .setSelectionArgs(identification.identificationArgs())
                 .build();
         Cursor cursor = queryFromCriteria(criteria, dbHelper.getReadableDatabase());
+        CleanCursorReader reader = new CleanCursorReader(cursor);
         if (cursor.moveToFirst()) {
-            return parseFromCursor(cursor);
+            return parseFromCursorReader(reader);
         } else {
             return null;
         }
@@ -61,9 +63,10 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
     public List<T> query(QueryCriteria queryCriteria) {
         Cursor cursor = queryFromCriteria(queryCriteria, dbHelper.getReadableDatabase());
         List<T> result = new ArrayList<>();
+        CleanCursorReader reader = new CleanCursorReader(cursor);
         if (cursor.moveToFirst()) {
             do {
-                result.add(parseFromCursor(cursor));
+                result.add(parseFromCursorReader(reader));
             } while (cursor.moveToNext());
 
         }
@@ -145,9 +148,10 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
     public List<T> rawQuery(String sql, String... args) {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(sql, args);
         List<T> result = new ArrayList<>();
+        CleanCursorReader reader = new CleanCursorReader(cursor);
         if (cursor.moveToFirst()) {
             do {
-                result.add(parseFromCursor(cursor));
+                result.add(parseFromCursorReader(reader));
             } while (cursor.moveToNext());
         }
         return result;

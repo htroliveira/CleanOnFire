@@ -33,7 +33,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("new $T($L.getLong($L.getColumnIndex($S)))", DATE_CLASSNAME, cursorVariableName, cursorVariableName, columnName);
+            return new Statement("new $T($L.getLong($S))", DATE_CLASSNAME, cursorVariableName, columnName);
         }
 
         @Override
@@ -53,7 +53,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getInt($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getInt($S)", cursorVariableName, columnName);
         }
     },
 
@@ -65,7 +65,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getLong($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getLong($S)", cursorVariableName, columnName);
         }
     },
     STRING(STRING_CLASSNAME) {
@@ -76,7 +76,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getString($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getString($S)", cursorVariableName, columnName);
         }
     },
     BYTEARRAY(BYTEARRAY_CLASSNAME) {
@@ -87,7 +87,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getBlob($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getBlob($S)", cursorVariableName, columnName);
         }
     },
 
@@ -100,7 +100,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getFloat($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getFloat($S)", cursorVariableName, columnName);
         }
     },
 
@@ -112,7 +112,7 @@ public enum TypePersistence {
 
         @Override
         public Statement cursorParsing(String cursorVariableName, String columnName) {
-            return new Statement("$L.getDouble($L.getColumnIndex($S))", cursorVariableName, cursorVariableName, columnName);
+            return new Statement("$L.getDouble($S)", cursorVariableName, columnName);
         }
     };
 

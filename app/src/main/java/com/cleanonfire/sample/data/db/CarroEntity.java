@@ -2,6 +2,7 @@ package com.cleanonfire.sample.data.db;
 
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
+import com.cleanonfire.annotations.data.db.IgnoreField;
 import com.cleanonfire.annotations.data.db.PrimaryKey;
 import com.cleanonfire.annotations.data.db.Table;
 
@@ -16,7 +17,7 @@ import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.RE
 @Table(tableName = "carros")
 public class CarroEntity {
     @PrimaryKey(autoincrement = true)
-    @FieldInfo(columnName = "idDoCarro")
+    @FieldInfo(columnName = "idDoCarro" )
     private Long id;
 
     @ForeignKey(target = ModeloEntity.class, name = "modelo", update = RESTRICT, delete = CASCADE)
@@ -27,7 +28,6 @@ public class CarroEntity {
     private String cor;
 
     private Date fabricacao;
-
 
     public Long getId() {
         return id;
