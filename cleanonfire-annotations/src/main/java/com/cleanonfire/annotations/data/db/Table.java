@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Created by heitorgianastasio on 02/10/17.
  */
-@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
 public @interface Table {
     String tableName() default "";
-    int version() default -1;
 }

@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Created by heitorgianastasio on 02/10/17.
  */
-@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
+@Retention(RetentionPolicy.CLASS)
 public @interface PrimaryKey {
     boolean autoincrement() default false;
 }
