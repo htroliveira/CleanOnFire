@@ -98,10 +98,6 @@ public final class QueryCriteria {
             queryCriteria.selectionArgs = Utils.parseToStringArray(selectionArgs);
             return this;
         }
-        public Builder setSelectionArgs(String... selectionArgs) {
-            queryCriteria.selectionArgs = selectionArgs;
-            return this;
-        }
 
         public Builder setGroupBy(String groupBy) {
             queryCriteria.groupBy = groupBy;

@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * Created by heitorgianastasio on 17/10/17.
  */
 public abstract class PostThread {
-
+    private PostThread(){}
 
     static PostThread MAIN_THREAD() {
         return new PostThread() {

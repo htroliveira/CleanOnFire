@@ -1,5 +1,7 @@
 package com.cleanonfire.processor.utils;
 
+import com.squareup.javapoet.TypeName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
@@ -47,7 +50,12 @@ public final class ProcessingUtils {
     }
 
     public static String getGetterName(Element element) {
-        return new StringBuilder("get").append(firstLetterToUp(element.getSimpleName())).toString();
+        String prefix;
+        if (TypeName.get(element.asType()).box().equals(TypeName.get(Boolean.class)))
+            prefix = "is";
+        else
+            prefix = "get";
+        return new StringBuilder(prefix).append(firstLetterToUp(element.getSimpleName())).toString();
 
     }
 

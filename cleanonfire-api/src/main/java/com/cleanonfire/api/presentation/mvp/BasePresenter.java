@@ -14,7 +14,7 @@ import java.util.List;
  * Created by heitorgianastasio on 04/11/17.
  */
 
-public class BasePresenter<T extends BaseViewContract> {
+public class BasePresenter<T> {
     private UseCaseExecutor executor;
     private T view;
     private final List<UseCaseExecution> executions = new ArrayList<>();

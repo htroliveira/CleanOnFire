@@ -15,6 +15,9 @@ import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.RE
  */
 @Table(tableName = "carros")
 public class CarroEntity {
+
+    public CarroEntity(){}
+
     @PrimaryKey(autoincrement = true)
     @FieldInfo(columnName = "idDoCarro" )
     private Long id;

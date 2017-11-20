@@ -6,11 +6,9 @@ import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.google.auto.service.AutoService;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -22,7 +20,7 @@ import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class  CleanOnFireProcessor extends AbstractProcessor {
+public class CleanOnFireProcessor extends AbstractProcessor {
 
     ProcessingEnvironment processingEnvironment;
 
@@ -31,8 +29,6 @@ public class  CleanOnFireProcessor extends AbstractProcessor {
         super.init(processingEnvironment);
         this.processingEnvironment = processingEnvironment;
         ProcessingUtils.init(processingEnvironment);
-        createFileOi(processingEnvironment.getFiler());
-
     }
 
     @Override
@@ -43,9 +39,10 @@ public class  CleanOnFireProcessor extends AbstractProcessor {
             Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(annotation);
             try {
                 if (elements.isEmpty()) continue;
-                supportedAnnotation.getProcessor().process(elements,roundEnvironment);
-            }catch (ProcessingException pe){
-                processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR,pe.getCompilerMessage(),pe.getElement());
+                supportedAnnotation.getProcessor().process(elements, roundEnvironment);
+            } catch (ProcessingException pe) {
+                processingEnvironment.getMessager().printMessage(Diagnostic.Kind.ERROR, pe.getCompilerMessage(), pe.getElement());
+                return true;
             }
         }
 
@@ -63,16 +60,4 @@ public class  CleanOnFireProcessor extends AbstractProcessor {
     }
 
 
-    private void createFileOi(Filer filer){
-        try {
-            //FileObject fileObject = filer.getResource(StandardLocation.SOURCE_OUTPUT,"assets","oi.json");
-            //PrintWriter writer = new PrintWriter(fileObject.openWriter());
-            Map<String,String> options = processingEnvironment.getOptions();
-            options.keySet();
-            //writer.printf("{\"oi\":true}");
-            //writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

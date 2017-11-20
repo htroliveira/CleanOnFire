@@ -10,7 +10,7 @@ import com.cleanonfire.api.core.UseCase;
 public final class UseCaseExecution<P, R, TP, TR> {
     UseCase<P, R> useCase;
     OnResultListener<TR> resultListener;
-    OnErrorListener errorListener;
+    OnErrorListener errorListener = e -> {throw new RuntimeException(e);};
     Mapper<TP, P> paramMapper;
     Mapper<R, TR> resultMapper;
     PostThread postThread;

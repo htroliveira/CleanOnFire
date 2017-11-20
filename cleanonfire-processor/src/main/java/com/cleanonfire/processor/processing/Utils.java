@@ -3,6 +3,7 @@ package com.cleanonfire.processor.processing;
 import com.cleanonfire.annotations.data.db.FieldInfo;
 import com.cleanonfire.annotations.data.db.ForeignKey;
 import com.cleanonfire.annotations.presentation.adapter.Bind;
+import com.cleanonfire.processor.core.Validator;
 import com.cleanonfire.processor.utils.ProcessingUtils;
 import com.cleanonfire.processor.utils.StringUtils;
 import com.squareup.javapoet.ClassName;
@@ -10,10 +11,14 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -120,6 +125,47 @@ public class Utils {
             return e.getTypeMirror();
         }
         return null;
+    }
+
+
+    public static Validator.ValidationResult validatePublicNoArgsConstructors(TypeElement element) {
+
+        Optional<ExecutableElement> constructorOpt = element.getEnclosedElements()
+                .stream()
+                .filter(o -> o instanceof ExecutableElement)
+                .map(o -> (ExecutableElement) o)
+                .filter( executableElement ->
+                        executableElement.getKind().equals(ElementKind.CONSTRUCTOR) &&
+                                executableElement.getModifiers().contains(Modifier.PUBLIC) &&
+                                executableElement.getParameters().size() == 0
+                )
+                .findFirst();
+
+        if (!constructorOpt.isPresent()) {
+            String msg = String.format("%s has not a public constructor with no args", element.getSimpleName().toString());
+            return new Validator.ValidationResult(false, Collections.singletonList(msg));
+        }
+
+        return new Validator.ValidationResult(true);
+
+    }
+
+    public static Validator.ValidationResult validateTypeElement(TypeElement element) {
+        if (element.getKind().isClass() && element.getModifiers().contains(Modifier.ABSTRACT)) {
+            String msg = String.format("%s is absract", element.getSimpleName().toString());
+            return new Validator.ValidationResult(false, Collections.singletonList(msg));
+        }
+        if (!element.getModifiers().contains(Modifier.PUBLIC)) {
+            String msg = String.format("%s is not pulbic", element.getSimpleName().toString());
+            return new Validator.ValidationResult(false, Collections.singletonList(msg));
+        }
+        if (element.getKind().isClass() && element.getEnclosingElement().getKind().isClass() && !element.getModifiers().contains(Modifier.STATIC)) {
+            String msg = String.format("%s is a inner class and is not static", element.getSimpleName().toString());
+            return new Validator.ValidationResult(false, Collections.singletonList(msg));
+        }
+
+        return new Validator.ValidationResult(true);
+
     }
 
     public static boolean verifyPublicGetterAndSetters(Element fieldElement) {

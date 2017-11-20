@@ -22,6 +22,7 @@ public final class CleanOnFireClassNames {
     public static ClassName CURSOR_READER = ClassName.get("com.cleanonfire.api.data.db","CleanCursorReader");
     public static ClassName IDENTIFICATION = ClassName.get("com.cleanonfire.api.data.db.BaseCleanDAO","Identification");
     public static ClassName CLEAN_SQLITE_HELPER = ClassName.get("com.cleanonfire.api.data.db","SQLiteCleanHelper");
+    public static ClassName MIGRATION = ClassName.get("com.cleanonfire.api.data.db","Migration");
     public static ClassName ABSTRACT_CLEAN_ON_FIRE_DB = ClassName.get("com.cleanonfire.api.data.db","AbstractCleanOnFireDB");
     public static ClassName CLEAN_ON_FIRE_DB = ClassName.get("com.generated.cleanonfire.db","CleanOnFireDB");
 

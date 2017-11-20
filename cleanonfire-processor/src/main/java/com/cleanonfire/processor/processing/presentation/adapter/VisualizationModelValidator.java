@@ -13,12 +13,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
+import static com.cleanonfire.processor.processing.Utils.validateTypeElement;
 import static com.cleanonfire.processor.processing.Utils.verifyPublicGetterAndSetters;
 import static com.cleanonfire.processor.utils.AndroidFrameworkClassNames.VIEW;
 import static com.cleanonfire.processor.utils.CleanOnFireClassNames.VIEW_BINDER;
@@ -30,8 +34,15 @@ import static com.cleanonfire.processor.utils.CleanOnFireClassNames.VIEW_BINDER;
 public class VisualizationModelValidator implements Validator<AdapterClassBundle> {
     @Override
     public ValidationResult validate(AdapterClassBundle bundle) throws ProcessingException {
+
+
+        ValidationResult classValidation = validateTypeElement(bundle.getMainElement());
+        if (!classValidation.isValid())
+            return new ValidationResult(false, classValidation.getMessages());
+
+
         for (VariableElement element : bundle.getBoundElements()) {
-            ValidationResult validationField = validateField(element, bundle);
+            ValidationResult validationField = validateField(element);
             if (!validationField.isValid())
                 return new ValidationResult(false, validationField.getMessages());
         }
@@ -39,7 +50,7 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
     }
 
 
-    private ValidationResult validateField(VariableElement element, AdapterClassBundle bundle) {
+    private ValidationResult validateField(VariableElement element) {
         Bind bind = element.getAnnotation(Bind.class);
 
         if (!verifyPublicGetterAndSetters(element)) {
@@ -61,8 +72,19 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
     }
 
 
+
+
     private ValidationResult validateBinder(Bind bind, VariableElement element) {
         DeclaredType binder = (DeclaredType) Utils.getBinderTypeMirror(bind);
+
+        ValidationResult classValidation = validateTypeElement((TypeElement) binder.asElement());
+        if (!classValidation.isValid())
+            return new ValidationResult(false, classValidation.getMessages());
+
+
+        ValidationResult constructorValidation = Utils.validatePublicNoArgsConstructors((TypeElement) binder.asElement());
+        if (!constructorValidation.isValid())
+            return new ValidationResult(false, constructorValidation.getMessages());
 
         ValidationResult interfaceValidation = validateBinderInterface(binder);
         if (!interfaceValidation.isValid())
@@ -70,17 +92,16 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
 
         ValidationResult inputValidation = validateBinderInputType(binder, element);
         if (!inputValidation.isValid())
-            return new ValidationResult(false, Collections.singletonList(String.format("The binder %s of the %s field doesn't support a %s input", binder.toString(), element.getSimpleName(),element.asType().toString())));
+            return new ValidationResult(false, Collections.singletonList(String.format("The binder %s of the %s field doesn't support a %s input", binder.toString(), element.getSimpleName(), element.asType().toString())));
 
         TypeMirror viewType = Utils.getBindViewTypeMirror(bind);
-        ValidationResult viewValidation = validateBinderViewType(binder,viewType);
+        ValidationResult viewValidation = validateBinderViewType(binder, viewType);
         if (!viewValidation.isValid())
-            return new ValidationResult(false, Collections.singletonList(String.format("The binder %s of the %s field can't bind a %s component", binder.toString(), element.getSimpleName(),viewType.toString())));
+            return new ValidationResult(false, Collections.singletonList(String.format("The binder %s of the %s field can't bind a %s component", binder.toString(), element.getSimpleName(), viewType.toString())));
 
 
         return validateBinderInterface(binder);
     }
-
 
 
     private ValidationResult validateView(Bind bind) {
@@ -112,7 +133,7 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
 
         if (!binder.isPresent() && superclass.getKind().equals(TypeKind.NONE)) {
             return new ValidationResult(false);
-        } else if (binder.isPresent() && ProcessingUtils.getTypeUtils().isAssignable(element.asType(),binder.get().getTypeArguments().get(0))) {
+        } else if (binder.isPresent() && ProcessingUtils.getTypeUtils().isAssignable(element.asType(), binder.get().getTypeArguments().get(0))) {
             return new ValidationResult(true);
         } else {
             return validateBinderInputType((DeclaredType) superclass, element);
@@ -130,7 +151,7 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
 
         if (!binder.isPresent() && superclass.getKind().equals(TypeKind.NONE)) {
             return new ValidationResult(false);
-        } else if (binder.isPresent() && ProcessingUtils.getTypeUtils().isAssignable(viewType,binder.get().getTypeArguments().get(1))) {
+        } else if (binder.isPresent() && ProcessingUtils.getTypeUtils().isAssignable(viewType, binder.get().getTypeArguments().get(1))) {
             return new ValidationResult(true);
         } else {
             return validateBinderViewType((DeclaredType) superclass, viewType);
@@ -159,9 +180,4 @@ public class VisualizationModelValidator implements Validator<AdapterClassBundle
             return validateBinderInterface((DeclaredType) superclass);
         }
     }
-
-    /*
-    * Binder se recebe o mesmo tipo do campo
-    * Binder se suporta a View declarada
-    * */
 }

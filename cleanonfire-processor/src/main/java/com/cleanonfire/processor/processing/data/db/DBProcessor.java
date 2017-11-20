@@ -2,6 +2,7 @@ package com.cleanonfire.processor.processing.data.db;
 
 import com.cleanonfire.annotations.data.db.Database;
 import com.cleanonfire.annotations.data.db.Table;
+import com.cleanonfire.processor.core.ClassBuilder;
 import com.cleanonfire.processor.core.GenericAnnotationProcessor;
 import com.cleanonfire.processor.core.ProcessingException;
 import com.cleanonfire.processor.core.Validator;
@@ -26,6 +27,7 @@ import javax.lang.model.element.TypeElement;
 
 public class DBProcessor extends GenericAnnotationProcessor<Database> {
     private TableDBValidator validator = new TableDBValidator();
+    private DBValidator dbValidator = new DBValidator();
 
     public DBProcessor(Class<Database> annotationClass) {
         super(annotationClass);
@@ -34,53 +36,51 @@ public class DBProcessor extends GenericAnnotationProcessor<Database> {
     @Override
     public void process(Set<? extends Element> elements, RoundEnvironment environment) throws ProcessingException {
         DDLScriptBuilder ddlScriptBuilder = new DDLScriptBuilder();
-        CleanOnFireDBClassBuilder cleanOnFireDBClassBuilder = new CleanOnFireDBClassBuilder();
-        if (elements.size()>1) {
-            throw new RuntimeException("You must have only one @Database specification");
-        }if (elements.size()<=0){
-            throw new RuntimeException("You must have at least one @Database specification");
 
-        }else{
-            Database db = elements.iterator().next().getAnnotation(Database.class);
-            cleanOnFireDBClassBuilder.setVersion(db.version());
-            cleanOnFireDBClassBuilder.setDbName(db.name());
+        if (elements.size() > 1) {
+            throw new RuntimeException("You must have only one @Database specification");
+        }
+        DBClassBundle dbClassBundle = new DBClassBundle((TypeElement) elements.iterator().next());
+        Validator.ValidationResult dbValidation = dbValidator.validate(dbClassBundle);
+        if (!dbValidation.isValid()) {
+            throw new ProcessingException(Database.class, dbClassBundle.getMainElement(), dbValidation.getMessages());
         }
 
-        for (Element element : environment.getElementsAnnotatedWith(Table.class)){
+        for (Element element : environment.getElementsAnnotatedWith(Table.class)) {
             DAOClassBundle bundle = DAOClassBundle.get((TypeElement) element);
             Validator.ValidationResult validation = validator.validate(bundle);
             if (validation.isValid()) {
                 try {
                     ddlScriptBuilder.addElement(bundle);
-                    JavaFile idFile = new IDClassBuilder(bundle).build();
-                    buildFile(idFile);
-                    ClassName idClassName = ClassName.get(idFile.packageName,idFile.typeSpec.name);
 
+                    String packageName = ProcessingUtils.getElementUtils().getPackageOf(element).getQualifiedName().toString();
+
+                    buildFile(new IDClassBuilder(bundle));
+                    ClassName idClassName = ClassName.get(packageName, element.getSimpleName()+"ID") ;
                     bundle.setIdClassName(idClassName);
-                    JavaFile daoFile = new DAOClassBuilder(bundle).build();
-                    buildFile(daoFile);
-                    ClassName daoClassName = ClassName.get(daoFile.packageName,daoFile.typeSpec.name);
-                    bundle.setIdClassName(idClassName);
-                    cleanOnFireDBClassBuilder.addDaoClassName(daoClassName);
+
+                    buildFile(new DAOClassBuilder(bundle));
+                    ClassName daoClassName = ClassName.get(packageName,element.getSimpleName()+"CleanDAO");
+                    dbClassBundle.addDaoClassName(daoClassName);
 
 
                 } catch (IOException e) {
-                    throw new ProcessingException(annotationClass, element, Collections.singletonList("Was not possible to write the file"));
+                    throw new ProcessingException(Table.class, element, Collections.singletonList("Was not possible to write the file"));
                 }
             } else {
-                throw new ProcessingException(annotationClass, element, validation.getMessages());
+                throw new ProcessingException(Table.class, element, validation.getMessages());
             }
         }
-        cleanOnFireDBClassBuilder.setSqlCreateScript(ddlScriptBuilder.build());
+        dbClassBundle.setSqlCreateScript(ddlScriptBuilder.build());
         try {
-            buildFile(cleanOnFireDBClassBuilder.build());
-        } catch (IOException e) {}
+            buildFile(new CleanOnFireDBClassBuilder(dbClassBundle));
+        } catch (IOException e) {
+        }
     }
 
 
-
-    private void buildFile(JavaFile file) throws IOException {
-        file.writeTo(ProcessingUtils.getFiler());
+    private void buildFile(ClassBuilder builder) throws IOException {
+        builder.build().writeTo(ProcessingUtils.getFiler());
     }
 
 

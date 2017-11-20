@@ -1,5 +1,6 @@
 package com.cleanonfire.sample.presentation.main.presenter;
 
+import com.cleanonfire.api.core.Mapper;
 import com.cleanonfire.api.interaction.OnResultListener;
 import com.cleanonfire.api.interaction.UseCaseExecutor;
 import com.cleanonfire.api.presentation.mvp.BasePresenter;
@@ -29,12 +30,9 @@ public class MainPresenter extends BasePresenter<MainViewContract> {
     public void getCarros() {
         executeUseCase(getAllCarros)
                 .transformResult(CarrosMapper.CARRO_TO_VISUALIZATION_LIST)
-                .onResult(new OnResultListener<List<CarroVisualziation>>() {
-                    @Override
-                    public void onResult(List<CarroVisualziation> carroVisualziations) {
-                        getView().renderCarros(carroVisualziations);
-                    }
-                })
+                .transformParams((Mapper<String,Void>) p -> null)
+                .onResult(carroVisualziations -> getView().renderCarros(carroVisualziations))
+                .with("adasdasdasd")
                 .run(getExecutor());
     }
 

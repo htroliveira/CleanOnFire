@@ -2,13 +2,12 @@ package com.cleanonfire.sample.data.carros;
 
 import com.cleanonfire.sample.core.carros.model.Carro;
 import com.cleanonfire.sample.core.carros.repository.CarrosRepository;
+import com.cleanonfire.sample.core.modelos.model.Modelo;
 import com.cleanonfire.sample.data.carros.mappers.CarrosMappers;
-import com.cleanonfire.sample.data.db.CarroEntity;
 import com.cleanonfire.sample.data.db.CarroEntityCleanDAO;
-import com.cleanonfire.sample.data.db.ModeloEntityCleanDAO;
 import com.generated.cleanonfire.db.CleanOnFireDB;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,24 +18,32 @@ import javax.inject.Inject;
 
 public class CarrosRepositoryImpl implements CarrosRepository {
     CarroEntityCleanDAO dao = CleanOnFireDB.get().getCarroEntityCleanDAO();
-    ModeloEntityCleanDAO modeloDao = CleanOnFireDB.get().getModeloEntityCleanDAO();
+
     @Inject
-    public CarrosRepositoryImpl() {}
+    public CarrosRepositoryImpl() {
+    }
 
     @Override
     public List<Carro> getAll() {
-
-        List<Carro> carros = new ArrayList<>();
-        for (CarroEntity entity : dao.getAll()) {
-            Carro carro = CarrosMappers.ENTITY_TO_CARRO.map(entity);
-            carro.setModelo(CarrosMappers.ENTITY_TO_MODELO.map(modeloDao.getById(entity.getModeloId())));
-            carros.add(carro);
-        }
-        return carros;
+        //return CarrosMappers.mapEntityListToModelList(CarroEntityCleanDAO::getModelo).map(dao.getAll());
+        return CleanOnFireDB.get().rawQuery(cursorReader -> {
+                    Modelo modelo = new Modelo();
+                    modelo.setNome(cursorReader.getString("nome"));
+                    modelo.setId(cursorReader.getInt("modelo_id"));
+                    Carro carro = new Carro();
+                    carro.setAno(new Date(cursorReader.getLong("fabricacao")));
+                    carro.setId(cursorReader.getLong("_id"));
+                    carro.setCor(cursorReader.getString("cor"));
+                    carro.setModelo(modelo);
+                    return new Carro();
+                },
+                "SELECT * FROM carros INNER JOIN modelo on carros.modelo_id = modelo.id "
+        );
     }
 
     @Override
     public Carro getById(long id) {
-        return CarrosMappers.ENTITY_TO_CARRO.map(dao.getById(id));
+        return CarrosMappers.mapEntityToModel(CarroEntityCleanDAO::getModelo).map(dao.getById(id));
     }
+
 }

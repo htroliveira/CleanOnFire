@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.cleanonfire.R;
+import com.cleanonfire.api.interaction.PostThread;
 import com.cleanonfire.sample.di.DaggerInjector;
 import com.cleanonfire.sample.presentation.base.BaseActivity;
 import com.cleanonfire.sample.presentation.base.di.DaggerViewComponent;
@@ -15,6 +16,7 @@ import com.cleanonfire.sample.presentation.main.viewcontract.MainViewContract;
 import com.cleanonfire.sample.presentation.main.visualization.CarroVisualziation;
 import com.cleanonfire.sample.presentation.main.visualization.CarroVisualziationAdapter;
 import com.cleanonfire.sample.presentation.main.visualization.CarroVisualziationViewHolderBinder;
+import com.generated.cleanonfire.db.CleanOnFireDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,8 @@ public class MainActivity extends BaseActivity implements MainViewContract {
         rvCarros.setAdapter(adapter);
         presenter.getCarros();
 
+
+
     }
 
     @Override
@@ -67,4 +71,5 @@ public class MainActivity extends BaseActivity implements MainViewContract {
                 .build()
                 .inject(this);
     }
+
 }

@@ -79,16 +79,20 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
 
     public I save(T t) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+        db.beginTransaction();
         try {
-            return insertOrThrow(db, t);
+            I i = insertOrThrow(db,t);
+            db.setTransactionSuccessful();
+            return i;
         } catch (SQLException e) {
             I id = getId(t);
             db.update(getTableName(), parseToContentValues(t), getIdentificationCondition(), id.identificationArgs());
+            db.setTransactionSuccessful();
             return id;
         } catch (Exception e) {
             throw e;
         } finally {
+            db.endTransaction();
             db.close();
         }
     }
@@ -108,8 +112,17 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
     }
 
     public int update(ContentValues values, ModificationCriteria criteria) {
-        try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            return db.update(getTableName(), values, criteria.getSelection(), criteria.selectionArgs);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            int result = db.update(getTableName(), values, criteria.getSelection(), criteria.selectionArgs);
+            db.setTransactionSuccessful();
+            return result;
+        }catch(Exception e){
+            throw e;
+        }finally {
+            db.endTransaction();
+            db.close();
         }
     }
 
@@ -145,16 +158,18 @@ public abstract class BaseCleanDAO<T, I extends BaseCleanDAO.Identification> {
         }
     }
 
-    public List<T> rawQuery(String sql, String... args) {
-        Cursor cursor = dbHelper.getReadableDatabase().rawQuery(sql, args);
-        List<T> result = new ArrayList<>();
-        CleanCursorReader reader = new CleanCursorReader(cursor);
-        if (cursor.moveToFirst()) {
-            do {
-                result.add(parseFromCursorReader(reader));
-            } while (cursor.moveToNext());
+    public List<T> rawQuery(String sql, Object... args) {
+        try(SQLiteDatabase db = dbHelper.getReadableDatabase()) {
+            Cursor cursor = db.rawQuery(sql, Utils.parseToStringArray(args));
+            List<T> result = new ArrayList<>();
+            CleanCursorReader reader = new CleanCursorReader(cursor);
+            if (cursor.moveToFirst()) {
+                do {
+                    result.add(parseFromCursorReader(reader));
+                } while (cursor.moveToNext());
+            }
+            return result;
         }
-        return result;
     }
 
 

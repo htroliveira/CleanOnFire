@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by heitorgianastasio on 11/11/17.
+ * Created by heitorgianastasio on 19/11/17.
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.TYPE)
-public @interface Database {
-    String dbname() default "";
-    int version();
+@Target(ElementType.FIELD)
+public @interface Migrate {
+    int fromVersion();
+    int toVersion();
 }

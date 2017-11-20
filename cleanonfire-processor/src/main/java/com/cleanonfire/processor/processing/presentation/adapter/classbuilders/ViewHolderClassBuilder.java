@@ -45,14 +45,17 @@ public class ViewHolderClassBuilder implements ClassBuilder {
                 .classBuilder(bundle.getViewHolderClassName())
                 .addModifiers(Modifier.PUBLIC);
 
-        if (bundle.getVisualizationModel().adapterType().equals(RECYCLERVIEW)){
+        if (bundle.getVisualizationModel().adapterType().equals(RECYCLERVIEW)) {
             builder.superclass(RECYCLER_VIEW_HOLDER);
-        }else {
-            builder.addSuperinterface(VIEW_HOLDER);
+        } else {
+            builder
+                    .addSuperinterface(VIEW_HOLDER)
+                    .addField(buildRootField());
         }
-                builder
+        builder
                 .addFields(buildFields())
-                .addMethod(buildConstructor());
+                .addMethod(buildConstructor())
+                .addMethod(buildGetRoot());
 
         return builder.build();
     }
@@ -61,30 +64,49 @@ public class ViewHolderClassBuilder implements ClassBuilder {
         MethodSpec.Builder builder = MethodSpec
                 .constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(VIEW,"root");
-        if(bundle.getVisualizationModel().adapterType().equals(RECYCLERVIEW))
+                .addParameter(VIEW, "root");
+        if (bundle.getVisualizationModel().adapterType().equals(RECYCLERVIEW))
             builder.addStatement("super(root)");
+        else
+            builder.addStatement("itemView = root");
 
         for (VariableElement variableElement : bundle.getBoundElements()) {
             Bind bind = variableElement.getAnnotation(Bind.class);
-            builder.addStatement("$L = root.findViewById($L)",getFieldName(variableElement),bind.layoutId());
+            builder.addStatement("$L = root.findViewById($L)", getFieldName(variableElement), bind.layoutId());
         }
 
         return builder.build();
     }
+
+    MethodSpec buildGetRoot() {
+        MethodSpec.Builder builder = MethodSpec
+                .methodBuilder("getRoot")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .returns(VIEW)
+                .addStatement("return itemView");
+
+
+        return builder.build();
+    }
+
     List<FieldSpec> buildFields() {
         List<FieldSpec> specs = new ArrayList<>();
         for (VariableElement variableElement : bundle.getBoundElements()) {
             TypeName viewTypeName = Utils.getBindViewTypeName(variableElement.getAnnotation(Bind.class));
             specs.add(
-                    FieldSpec.builder(viewTypeName,getFieldName(variableElement)).build()
+                    FieldSpec.builder(viewTypeName, getFieldName(variableElement)).build()
             );
         }
         return specs;
     }
 
+    FieldSpec buildRootField() {
+        return FieldSpec.builder(VIEW, "itemView", Modifier.PROTECTED).build();
+    }
 
-    private String getFieldName(Element element){
+
+    private String getFieldName(Element element) {
         return element.getSimpleName().toString().concat("View");
     }
 }
