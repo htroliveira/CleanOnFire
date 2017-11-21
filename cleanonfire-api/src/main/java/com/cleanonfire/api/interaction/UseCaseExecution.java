@@ -67,7 +67,7 @@ public final class UseCaseExecution<P, R, TP, TR> {
     public void run(UseCaseExecutor executor) {
         if (useCase == null)
             throw new RuntimeException("You cannot run a null UseCase");
-        PostThread postThread = this.postThread!=null? this.postThread : PostThread.MAIN_THREAD();
+        PostThread postThread = this.postThread!=null? this.postThread : PostThread.mainThread();
 
         executor.run(this, (listener,errorListener) -> {
 

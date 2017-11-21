@@ -1,8 +1,36 @@
 apply plugin: 'java'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'cleanonfire-annotations'
+
+    publishedGroupId = 'com.cleanonfire'
+    libraryName = 'CleanOnFire'
+    artifact = 'cleanonfire-annotations'
+
+    libraryDescription = 'A lightweight multiproposal framework for Android'
+
+    siteUrl = 'https://github.com/heitor-gia/CleanOnFire'
+    gitUrl = 'https://github.com/heitor-gia/CleanOnFire.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'heitor-gia'
+    developerName = 'Heitor Gianastasio'
+    developerEmail = 'heitor.gianastasio@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+
+apply from: rootProject.file('release-bintray.gradle')

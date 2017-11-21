@@ -7,8 +7,7 @@ import com.cleanonfire.annotations.data.db.Table;
 
 import java.util.Date;
 
-import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.CASCADE;
-import static com.cleanonfire.annotations.data.db.ForeignKey.ForeignKeyPolicy.RESTRICT;
+import static com.cleanonfire.annotations.data.db.ForeignKey.*;
 
 /**
  * Created by heitorgianastasio on 26/10/17.
@@ -22,11 +21,11 @@ public class CarroEntity {
     @FieldInfo(columnName = "idDoCarro" )
     private Long id;
 
-    @ForeignKey(target = ModeloEntity.class, name = "modelo", update = RESTRICT, delete = CASCADE)
+    @ForeignKey(target = ModeloEntity.class, name = "modelo", update = ForeignKeyPolicy.RESTRICT, delete = ForeignKeyPolicy.CASCADE)
     @FieldInfo(columnName = "modelo_id")
     private int modeloId;
 
-    @FieldInfo(length = 50)
+    @FieldInfo(columnName = "cor_do_carro",length = 50, defaultValue = "234", nullable = false, unique = true)
     private String cor;
 
     private Date fabricacao;

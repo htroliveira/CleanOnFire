@@ -25,8 +25,12 @@ public class CarrosRepositoryImpl implements CarrosRepository {
 
     @Override
     public List<Carro> getAll() {
-        //return CarrosMappers.mapEntityListToModelList(CarroEntityCleanDAO::getModelo).map(dao.getAll());
-        return CleanOnFireDB.get().rawQuery(cursorReader -> {
+        CleanOnFireDB.get()
+                .getCarroEntityCleanDAO()
+                .save();
+
+        return CarrosMappers.mapEntityListToModelList(CarroEntityCleanDAO::getModelo).map(dao.getAll());
+        /*return CleanOnFireDB.get().rawQuery(cursorReader -> {
                     Modelo modelo = new Modelo();
                     modelo.setNome(cursorReader.getString("nome"));
                     modelo.setId(cursorReader.getInt("modelo_id"));
@@ -38,7 +42,7 @@ public class CarrosRepositoryImpl implements CarrosRepository {
                     return new Carro();
                 },
                 "SELECT * FROM carros INNER JOIN modelo on carros.modelo_id = modelo.id "
-        );
+        );*/
     }
 
     @Override

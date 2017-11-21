@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface MainViewContract{
     void renderCarros(List<CarroVisualziation> carroVisualziations);
-
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public abstract class PostThread {
     private PostThread(){}
 
-    static PostThread MAIN_THREAD() {
+    static PostThread mainThread() {
         return new PostThread() {
             @Override
             public void post(Runnable runnable) {
@@ -20,7 +20,7 @@ public abstract class PostThread {
         };
     }
 
-    static PostThread WORKER_THREAD(ThreadPoolExecutor executor) {
+    static PostThread workerThread(ThreadPoolExecutor executor) {
         return new PostThread() {
             @Override
             public void post(Runnable runnable) {
@@ -29,7 +29,7 @@ public abstract class PostThread {
         };
     }
 
-    static PostThread CURRENT_THREAD() {
+    static PostThread currentThread() {
         return new PostThread() {
             @Override
             public void post(Runnable runnable) {

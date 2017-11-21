@@ -14,11 +14,11 @@ import com.cleanonfire.api.data.db.Migration;
 public interface MyDatabase {
     @Migrate(fromVersion = 1, toVersion = 2)
     Migration MIGRATION_1_TO_2 = database -> {
-        database.execSQL("CREATE TABLE M12(ID INTEGER PRIMARY KEY)", new String[]{});
+        database.execSQL("CREATE TABLE M12(ID INTEGER PRIMARY KEY)");
     };
 
     @Migrate(fromVersion = 1, toVersion = 3)
     Migration MIGRATION_2_TO_3 = database -> {
-        database.execSQL("CREATE TABLE M13(ID INTEGER PRIMARY KEY)", new String[]{});
+        database.execSQL("CREATE TABLE M13(ID INTEGER PRIMARY KEY)");
     };
 }

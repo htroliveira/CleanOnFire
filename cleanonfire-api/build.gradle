@@ -1,5 +1,31 @@
 apply plugin: 'com.android.library'
 
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'cleanonfire-api'
+
+    publishedGroupId = 'com.cleanonfire'
+    libraryName = 'CleanOnFire'
+    artifact = 'cleanonfire-api'
+
+    libraryDescription = 'A lightweight multiproposal framework for Android'
+
+    siteUrl = 'https://github.com/heitor-gia/CleanOnFire'
+    gitUrl = 'https://github.com/heitor-gia/CleanOnFire.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'heitor-gia'
+    developerName = 'Heitor Gianastasio'
+    developerEmail = 'heitor.gianastasio@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
 android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
@@ -30,11 +56,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    api project(':cleanonfire-annotations')
+    api 'com.cleanonfire:cleanonfire-annotations:1.0.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    api 'com.android.support:recyclerview-v7:26.1.0'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    testImplementation'junit:junit:4.12'
 }
+apply from: rootProject.file('release-bintray.gradle')

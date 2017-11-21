@@ -1,0 +1,32 @@
+/**
+ * Bintray release configuration
+ * */
+ext {
+  bintrayRepo = 'maven'
+  bintrayName = POM_BINTRAY_NAME
+
+  publishedGroupId = 'com.cleanonfire'
+  libraryName = 'CleanOnFire'
+  artifact = POM_ARTIFACT_ID
+  packagingType = POM_PACKAGING
+
+  libraryDescription = POM_DESCRIPTION
+
+  siteUrl = 'https://github.com/heitor-gia/CleanOnFire'
+  gitUrl = 'https://github.com/heitor-gia/CleanOnFire.git'
+
+  libraryVersion = POM_VERSION
+
+  developerId = 'heitor-gia'
+  developerName = 'Heitor Gianastasio'
+  developerEmail = 'heitor.gianastasio@gmail.com'
+
+  licenseName = 'MIT'
+  allLicenses = ["MIT"]
+}
+
+// Set up the Android Maven publication.
+apply from: rootProject.file('jcenter/maven-install.gradle')
+
+// Publish on Bintray.
+apply from: rootProject.file('jcenter/bintray.gradle')

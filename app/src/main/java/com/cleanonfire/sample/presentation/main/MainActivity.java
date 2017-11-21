@@ -48,8 +48,6 @@ public class MainActivity extends BaseActivity implements MainViewContract {
         rvCarros.setAdapter(adapter);
         presenter.getCarros();
 
-
-
     }
 
     @Override
@@ -71,5 +69,6 @@ public class MainActivity extends BaseActivity implements MainViewContract {
                 .build()
                 .inject(this);
     }
+
 
 }

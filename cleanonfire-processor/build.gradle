@@ -1,13 +1,40 @@
 apply plugin: 'java'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'cleanonfire-processor'
+
+    publishedGroupId = 'com.cleanonfire'
+    libraryName = 'CleanOnFire'
+    artifact = 'cleanonfire-processor'
+
+    libraryDescription = 'A lightweight multiproposal framework for Android'
+
+    siteUrl = 'https://github.com/heitor-gia/CleanOnFire'
+    gitUrl = 'https://github.com/heitor-gia/CleanOnFire.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'heitor-gia'
+    developerName = 'Heitor Gianastasio'
+    developerEmail = 'heitor.gianastasio@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
     implementation 'com.squareup:javapoet:1.9.0'
-    implementation project(':cleanonfire-annotations')
+    implementation 'com.cleanonfire:cleanonfire-annotations:1.0.0'
+
 
     testCompile 'junit:junit:4.12'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+apply from: rootProject.file('release-bintray.gradle')

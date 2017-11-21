@@ -27,7 +27,8 @@ public class CarroVisualziation {
 
     @Bind(layoutId = R.id.tvCor, view = TextView.class, binder = TextViewBinder.class, clickable = true, longClickable = true)
     private String cor;
-    @Bind(layoutId = R.id.tvAno, view = View.class, binder = OI.class)
+
+    @Bind(layoutId = R.id.tvAno, view = View.class, binder = VisibiltyBinder.class)
     private boolean vendido;
 
     public long getId() {
@@ -68,15 +69,5 @@ public class CarroVisualziation {
 
     public void setVendido(boolean vendido) {
         this.vendido = vendido;
-    }
-
-    public static class OI implements ViewBinder<Object,View>{
-
-        public OI(){}
-
-        @Override
-        public void bind(Object o, View view) {
-            view.setTag(o);
-        }
     }
 }

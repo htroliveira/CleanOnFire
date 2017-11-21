@@ -30,9 +30,13 @@ dependencies {
     })
     compile 'com.google.dagger:dagger:2.13'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
-    implementation project(':cleanonfire-api')
-    annotationProcessor project(':cleanonfire-processor')
+    //implementation project(':cleanonfire-api')
+    //annotationProcessor project(':cleanonfire-processor')
+    implementation 'com.cleanonfire:cleanonfire-api:1.0.1'
+    annotationProcessor 'com.cleanonfire:cleanonfire-processor:1.0.1'
+
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     testCompile 'junit:junit:4.12'
 }
 
