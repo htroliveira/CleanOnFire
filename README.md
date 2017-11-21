@@ -12,7 +12,7 @@ Adicione estas linhas ao seu build.gradle(project)
 ```groovy
 allprojects {
     repositories {
-        ...
+        //...
         maven{
             url 'https://dl.bintray.com/heitor-gia/maven/'
         }
@@ -22,7 +22,7 @@ allprojects {
 e estas ao seu build.gradle(module)
 ```groovy
 dependecies{
-    ...
+    //...
     implementation 'com.cleanonfire:cleanonfire-api:1.0.1'
     annotationProcessor 'com.cleanonfire:cleanonfire-processor:1.0.1'
 }
@@ -136,7 +136,7 @@ public class GetCarroById implements UseCase<Long,Carro> {
     @Override
     public void execute(Long id, OnResultListener<Carro> resultListener, OnErrorListener errorListener){
         try {
-            Carro carro = [...];
+            Carro carro = /*...*/;
             resultListener.onResult(carro);
         } catch (Exception e){
             errorListener.onError(e);
@@ -149,7 +149,7 @@ Declare seus ```Presenters``` e contratos de visualização:
 
 //Approach Java 8
 public class MainPresenter extends BasePresenter<MainViewContract> {
-    GetCarroByID getCarroById = [...];
+    GetCarroByID getCarroById = /*...*/;
 
     public MainPresenter(UseCaseExecutor executor) {
         super(executor);
@@ -163,7 +163,7 @@ public class MainPresenter extends BasePresenter<MainViewContract> {
                      getView().renderCarro(carroView);
                 })
                 .onError(exception ->{
-                    [...]
+                    //...
                 })
                 .on(PostThread.mainThread())
                 .with(stringId)
@@ -173,7 +173,7 @@ public class MainPresenter extends BasePresenter<MainViewContract> {
     public static Mapper<Carro, CarroView> CARRO_TO_CARROVIEW =
         carro -> {
             CarroView carroView = new CarroView();
-            [...]
+            //...
             return carroView;
         };
 
@@ -247,17 +247,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ...
+        //...
 
         CarroVisualizationViewHolderBinder viewHolderBinder =  new CarroVisualziationViewHolderBinder();
         adapter = new CarroVisualziationAdapter(getCarroVisualizations(), this, viewHolderBinder);
         rvCarros.setAdapter(adapter);
         
-        ...
+        //...
     }
 
     private List<CarroVisualization> getCarroVisualizations(){
-        ...
+        //...
     }
 }
 ```
