@@ -114,7 +114,7 @@ dao.deleteById(usuarioConsultado.getId());
 List<Usuario> todosUsuarios = dao.getAll();
 
 QueryCriteria criterioDeConsulta = QueryCriteria
-										.builder()
+                                        .builder()
                                         .setSelection("id IN (?,?,?)")
                                         .setSelectionArgs(1, 2, 3)
                                         .build();
