@@ -141,7 +141,7 @@ public class CleanOnFireDBClassBuilder implements ClassBuilder {
                     .methodBuilder("get" + StringUtils.firstLetterToUp(daoName.simpleName()))
                     .returns(daoName)
                     .addModifiers(Modifier.PUBLIC)
-                    .addStatement("return new $T(cleanHelper)", daoName)
+                    .addStatement("return new $T(buildHelper())", daoName)
                     .build();
             specs.add(spec);
         }

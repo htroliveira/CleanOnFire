@@ -23,8 +23,8 @@ e estas ao seu build.gradle(module)
 ```groovy
 dependecies{
     //...
-    implementation 'com.cleanonfire:cleanonfire-api:1.0.1'
-    annotationProcessor 'com.cleanonfire:cleanonfire-processor:1.0.1'
+    implementation 'com.cleanonfire:cleanonfire-api:1.0.6'
+    annotationProcessor 'com.cleanonfire:cleanonfire-processor:1.0.6'
 }
 ```
 
@@ -84,6 +84,17 @@ public class Usuario{
 
 A partir deste modelo será gerada uma classe DAO com o nome de ____"nome da classe do modelo"____+```CleanDAO```.
 E nesta classe haverão todos os métodos de inserção, edição, deleção e consulta referentes à tabela definida no modelo.
+
+Faça o build de seu projeto e logo após adcione o método de inicialização do CleanOnFireDB no método ```onCreate()``` da sua classe filha de ```Application```.
+```java
+public class MyApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        CleanOnFireDB.init(this);
+    }
+}
+```
 
 #### As classes DAO podem ser acessadas através da chamada:
 ```java 

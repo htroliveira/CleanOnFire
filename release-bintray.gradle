@@ -15,7 +15,7 @@ ext {
   siteUrl = 'https://github.com/heitor-gia/CleanOnFire'
   gitUrl = 'https://github.com/heitor-gia/CleanOnFire.git'
 
-  libraryVersion = '1.0.1'
+  libraryVersion = '1.0.6'
 
   developerId = 'heitor-gia'
   developerName = 'Heitor Gianastasio'

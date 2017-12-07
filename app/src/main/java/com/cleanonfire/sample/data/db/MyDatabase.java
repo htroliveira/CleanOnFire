@@ -17,8 +17,4 @@ public interface MyDatabase {
         database.execSQL("CREATE TABLE M12(ID INTEGER PRIMARY KEY)");
     };
 
-    @Migrate(fromVersion = 1, toVersion = 3)
-    Migration MIGRATION_2_TO_3 = database -> {
-        database.execSQL("CREATE TABLE M13(ID INTEGER PRIMARY KEY)");
-    };
 }

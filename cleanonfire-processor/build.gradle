@@ -28,7 +28,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc3'
     implementation 'com.squareup:javapoet:1.9.0'
-    implementation 'com.cleanonfire:cleanonfire-annotations:1.0.0'
+    implementation 'com.cleanonfire:cleanonfire-annotations:1.0.1'
 
 
     testCompile 'junit:junit:4.12'

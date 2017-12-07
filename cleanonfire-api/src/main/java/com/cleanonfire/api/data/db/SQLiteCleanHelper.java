@@ -27,6 +27,12 @@ public final class SQLiteCleanHelper extends SQLiteOpenHelper {
     }
 
     @Override
+    public void onOpen(SQLiteDatabase db) {
+
+        super.onOpen(db);
+    }
+
+    @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         List<Migration> migrations = abstractCleanOnFireDB.getMigrations(i, i1);
         if (!migrations.isEmpty()) {

@@ -23,12 +23,14 @@ import static android.util.Base64.encode;
 public abstract class AbstractCleanOnFireDB {
 
     protected Context context;
-    protected SQLiteCleanHelper cleanHelper;
     protected Map<VersionRange, Migration> migrations = new HashMap<>();
 
     public AbstractCleanOnFireDB(Context context) {
         this.context = context;
-        cleanHelper = new SQLiteCleanHelper(this, context, getDBName());
+    }
+
+    protected SQLiteCleanHelper buildHelper(){
+        return new SQLiteCleanHelper(this, context, getDBName());
     }
 
     private static String getApplicationName(Context context) {
@@ -47,10 +49,10 @@ public abstract class AbstractCleanOnFireDB {
                 if (migration != null)
                     requiredMigrations.add(migration);
             }
-            if (requiredMigrations.size() >= toVersion - fromVersion)
-                return requiredMigrations;
-            else
+            if (requiredMigrations.size() < toVersion - fromVersion)
                 return Collections.emptyList();
+            else
+                return requiredMigrations;
         }
     }
 
@@ -67,7 +69,7 @@ public abstract class AbstractCleanOnFireDB {
     }
 
     public <T> List<T> rawQuery(CleanCursorParser<T> parser, String sql, Object... args) {
-        try (SQLiteDatabase db = cleanHelper.getReadableDatabase()) {
+        try (SQLiteDatabase db = buildHelper().getReadableDatabase()) {
             Cursor cursor = db.rawQuery(sql, Utils.parseToStringArray(args));
             List<T> result = new ArrayList<>();
             CleanCursorReader reader = new CleanCursorReader(cursor);
